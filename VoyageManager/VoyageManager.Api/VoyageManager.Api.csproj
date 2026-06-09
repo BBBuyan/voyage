@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>6d9d6753-bef1-4da5-bea6-a3767f5294b4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Voyage.Contracts\VoyageManager.Conventions.csproj" />
+    <ProjectReference Include="..\VoyageManager.Infrastructure\VoyageManager.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,6 @@
+@VoyageManager.Api_HostAddress = http://localhost:5289
+
+GET {{VoyageManager.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:18.4
+    container_name: voyager-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: asdf
+      POSTGRES_DB: voyager
+    ports:
+      - "5432:5432"
