@@ -1,6 +1,6 @@
 using System;
 
-namespace VoyageManager.Application.Results;
+namespace VoyageManager.Application.DTOs;
 
 public class VoyagerAgentDTO
 {

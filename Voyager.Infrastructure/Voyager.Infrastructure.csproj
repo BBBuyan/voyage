@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Voyage.Contracts\VoyageManager.Conventions.csproj" />
     <ProjectReference Include="..\Voyager.Application\Voyager.Application.csproj" />
     <ProjectReference Include="..\Voyager\Voyager.Domain\Voyager.Domain.csproj" />
   </ItemGroup>

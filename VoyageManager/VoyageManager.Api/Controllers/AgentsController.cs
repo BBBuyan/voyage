@@ -57,10 +57,10 @@ public class AgentsController : ControllerBase
     /// <summary>
     /// Check whether commands exists or not.
     /// </summary>
-    [HttpPost("check-in")]
+    [HttpGet("check-in")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<CommandAssignment>>> CheckIn(CancellationToken ct)
+    public async Task<ActionResult<List<CheckInResponse>>> CheckIn(CancellationToken ct)
     {
         string? agentIdString = User.FindFirst("sub")?.Value;
 
@@ -69,7 +69,7 @@ public class AgentsController : ControllerBase
             return BadRequest("Invalid AgentId");
         }
 
-        ErrorOr<List<CommandAssignment>> result = await _agentService.CheckIn(agentId, ct);
+        ErrorOr<List<CheckInResponse>> result = await _agentService.CheckIn(agentId, ct);
 
         return result.MatchFirst<ActionResult>(
             value => Ok(value),
@@ -89,9 +89,9 @@ public class AgentsController : ControllerBase
     [HttpPost("token")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<string>> Token([FromBody] TokenRequest tokenRequest, CancellationToken ct)
+    public async Task<ActionResult<TokenResult>> Token([FromBody] TokenRequest tokenRequest, CancellationToken ct)
     {
-        ErrorOr<string> result = await _agentService.GetToken(tokenRequest, ct);
+        ErrorOr<TokenResult> result = await _agentService.GetToken(tokenRequest, ct);
 
         return result.MatchFirst<ActionResult>(
             onValue => Ok(onValue),
@@ -107,9 +107,21 @@ public class AgentsController : ControllerBase
     /// Report the command results.
     /// </summary>
     /// <returns></returns>
-    [HttpPost("results")]
-    public async Task<ActionResult<ResultsResponse>> Result([FromBody] ResultsRequest resultsRequest, CancellationToken ct)
+    [HttpPost("command-status")]
+    public async Task<ActionResult<CommandStatusResponse>> Result([FromBody] CommandStatusRequest request, CancellationToken ct)
     {
-        return Ok(new());
+        string? agentIdString = User.FindFirst("sub")?.Value;
+
+        if (!Guid.TryParse(agentIdString, out Guid agentId))
+        {
+            return BadRequest("Invalid AgentId");
+        }
+
+        ErrorOr<CommandStatusResponse> result = await _agentService.HandleCommandReports(agentId, request, ct);
+
+        return result.MatchFirst<ActionResult>(
+            onValue => Ok(onValue),
+            onError => Problem()
+            );
     }
 }

@@ -4,5 +4,5 @@ namespace VoyageManager.Application.Abstractions;
 
 public interface IVoyageTokenProvider
 {
-    string GenerateJwtToken(Guid voyagerHostId);
+    string GenerateJwtToken(Guid voyagerHostId, int expirationInSeconds);
 }

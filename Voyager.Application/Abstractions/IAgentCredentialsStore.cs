@@ -6,7 +6,7 @@ namespace Voyager.Application.Abstractions;
 
 public interface IAgentCredentialsStore
 {
-    Task<VoyagerAgentCredentials?> ReadAgentCredentials(CancellationToken ct);
+    Task<VoyagerAgentCredentials?> ReadAgentCredentialsAsync(CancellationToken ct);
 
-    Task<bool> SaveAgentCredentials(VoyagerAgentCredentials credentials, CancellationToken ct);
+    Task<bool> SaveAgentCredentialsAsync(VoyagerAgentCredentials credentials, CancellationToken ct);
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Voyage.Contracts\VoyageManager.Conventions.csproj" />
     <ProjectReference Include="..\VoyageManager.Domain\VoyageManager.Domain.csproj" />
   </ItemGroup>
 

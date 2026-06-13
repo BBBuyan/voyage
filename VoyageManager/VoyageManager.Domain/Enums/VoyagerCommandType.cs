@@ -1,4 +1,4 @@
-namespace VoyageManager.Conventions.Enums;
+namespace VoyageManager.Domain.Enums;
 
 public enum VoyagerCommandType
 {

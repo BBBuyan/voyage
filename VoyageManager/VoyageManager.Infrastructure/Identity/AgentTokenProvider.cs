@@ -20,7 +20,7 @@ public class AgentTokenProvider : IVoyageTokenProvider
         _signingCredentials = new(_key, SecurityAlgorithms.HmacSha256);
     }
 
-    public string GenerateJwtToken(Guid voyagerHostId)
+    public string GenerateJwtToken(Guid voyagerHostId, int expirationInSeconds)
     {
         Dictionary<string, object> claims = new()
         {
@@ -32,7 +32,7 @@ public class AgentTokenProvider : IVoyageTokenProvider
         {
             Issuer = _jwtOptions.Issuer,
             Audience = _jwtOptions.Audience,
-            Expires = DateTime.UtcNow.AddHours(12),
+            Expires = DateTime.UtcNow.AddSeconds(expirationInSeconds),
             IssuedAt = DateTime.UtcNow,
             SigningCredentials = _signingCredentials,
             Claims = claims,

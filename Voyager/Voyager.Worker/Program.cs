@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Voyager.Application;
 using Voyager.Infrastructure;
 using Voyager.Worker;
@@ -13,7 +14,9 @@ internal class Program
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure(builder.Configuration);
 
-        builder.Services.AddHostedService<Worker>();
+        builder.Logging.AddConsole();
+
+        builder.Services.AddHostedService<VoyagerAgentWorker>();
 
         var host = builder.Build();
 

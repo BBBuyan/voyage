@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VoyageManager.Application.Results;
+using VoyageManager.Application.DTOs;
 
 namespace VoyageManager.Api.Controllers;
 

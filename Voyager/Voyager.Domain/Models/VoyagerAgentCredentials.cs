@@ -11,4 +11,21 @@ public class VoyagerAgentCredentials
     public required string Name { get; set; }
 
     public required string Password { get; set; }
+
+    public bool IsValid()
+    {
+        if (TenantId == Guid.Empty)
+            return false;
+
+        if (AgentId == Guid.Empty)
+            return false;
+
+        if (string.IsNullOrEmpty(Name))
+            return false;
+
+        if (string.IsNullOrEmpty(Password))
+            return false;
+
+        return true;
+    }
 }

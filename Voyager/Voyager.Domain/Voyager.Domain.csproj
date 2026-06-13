@@ -5,8 +5,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Voyage.Contracts\VoyageManager.Conventions.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -1,9 +1,8 @@
 using System.Security.Cryptography;
-using Voyager.Application.Abstractions;
 
-namespace Voyager.Infrastructure.Storage;
+namespace Voyager.Infrastructure.Generators;
 
-public class PasswordGenerator : IPasswordGenerator
+public static class PasswordGenerator
 {
     private const string Uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private const string Lowercase = "abcdefghijklmnopqrstuvwxyz";
@@ -11,7 +10,7 @@ public class PasswordGenerator : IPasswordGenerator
     private const string Symbols = "!@#$%^&*()-_=+[]{};:,.<>?";
     private const int PasswordLength = 16;
 
-    public string GeneratePassword()
+    public static string GeneratePassword()
     {
         string allChars = Uppercase + Lowercase + Digits + Symbols;
         return RandomNumberGenerator.GetString(allChars, PasswordLength);

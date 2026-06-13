@@ -4,7 +4,7 @@ using Voyager.Domain.Models;
 
 namespace Voyager.Application.Interfaces;
 
-public interface IEnrollmentService
+public interface IAgentCredentialsProvider
 {
-    Task<VoyagerAgentCredentials> Enroll(CancellationToken ct);
+    Task<VoyagerAgentCredentials> GetAgentCredentialsAsync(CancellationToken ct);
 }

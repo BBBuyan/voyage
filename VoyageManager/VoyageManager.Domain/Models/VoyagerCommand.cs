@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using VoyageManager.Conventions.Enums;
 using VoyageManager.Domain.Enums;
 
 namespace VoyageManager.Domain.Models;

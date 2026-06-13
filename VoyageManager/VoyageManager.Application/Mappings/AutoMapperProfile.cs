@@ -1,6 +1,8 @@
 using AutoMapper;
-using VoyageManager.Application.Results;
+using VoyageManager.Application.DTOs;
 using VoyageManager.Conventions.Agents;
+using VoyageManager.Conventions.Enums;
+using VoyageManager.Domain.Enums;
 using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Application.Mappings;
@@ -10,6 +12,7 @@ public sealed class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<VoyagerAgent, VoyagerAgentDTO>();
-        CreateMap<VoyagerCommandAssignment, CommandAssignment>();
+        CreateMap<VoyagerCommandType, ConventionCommandType>();
+        CreateMap<VoyagerCommand, CheckInResponse>();
     }
 }

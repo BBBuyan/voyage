@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VoyageManager.Api.DTOs;
-using VoyageManager.Application.AgentManagement;
-using VoyageManager.Application.Results;
+using VoyageManager.Application.DTOs;
+using VoyageManager.Application.Interfaces;
 
 namespace VoyageManager.Api.Controllers;
 

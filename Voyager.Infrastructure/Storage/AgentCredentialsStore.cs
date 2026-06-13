@@ -1,18 +1,16 @@
-using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Voyager.Application.Abstractions;
+using Voyager.Domain.Helpers;
 using Voyager.Domain.Models;
 
 namespace Voyager.Infrastructure.Storage;
 
 public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
 {
-    private readonly string _agentStateFilePath;
-    private readonly string _agentStateFileName = "agent-state.json";
-
+    private readonly string _agentCredentialsFilePath;
     private readonly JsonSerializerOptions _agentJsonSerializerOptions = new()
     {
         WriteIndented = true
@@ -20,38 +18,23 @@ public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
 
     public AgentCredentialsStore()
     {
-        _agentStateFilePath = Path.Combine(_commonApplicationPath, _agentStateFileName);
+        _agentCredentialsFilePath = Path.Combine(_commonApplicationPath, AgentFileNames.AgentCredentialsFileName);
     }
 
-    public async Task<VoyagerAgentCredentials?> ReadAgentCredentials(CancellationToken ct)
+    public async Task<VoyagerAgentCredentials?> ReadAgentCredentialsAsync(CancellationToken ct)
     {
         try
         {
-            if (!File.Exists(_agentStateFilePath))
-                return null;
-            string json = await File.ReadAllTextAsync(_agentStateFilePath, ct);
-
-            if (string.IsNullOrWhiteSpace(json))
+            if (!File.Exists(_agentCredentialsFilePath))
                 return null;
 
-            VoyagerAgentCredentials? agentState = JsonSerializer.Deserialize<VoyagerAgentCredentials>(json);
+            string json = await File.ReadAllTextAsync(_agentCredentialsFilePath, ct);
+            VoyagerAgentCredentials? creds = JsonSerializer.Deserialize<VoyagerAgentCredentials>(json);
 
-            if (agentState is null)
+            if (creds is null || !creds.IsValid())
                 return null;
 
-            if (agentState.TenantId == Guid.Empty)
-                return null;
-
-            if (agentState.AgentId == Guid.Empty)
-                return null;
-
-            if (string.IsNullOrEmpty(agentState.Name))
-                return null;
-
-            if (string.IsNullOrEmpty(agentState.Password))
-                return null;
-
-            return agentState;
+            return creds;
         }
         catch
         {
@@ -59,12 +42,12 @@ public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
         }
     }
 
-    public async Task<bool> SaveAgentCredentials(VoyagerAgentCredentials credentials, CancellationToken ct)
+    public async Task<bool> SaveAgentCredentialsAsync(VoyagerAgentCredentials credentials, CancellationToken ct)
     {
         try
         {
             string json = JsonSerializer.Serialize(credentials, _agentJsonSerializerOptions);
-            await File.WriteAllTextAsync(_agentStateFilePath, json, ct);
+            await File.WriteAllTextAsync(_agentCredentialsFilePath, json, ct);
 
             return true;
         }

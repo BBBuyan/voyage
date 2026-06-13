@@ -10,7 +10,9 @@ public interface IAgentRespository
 {
     Task<VoyagerAgent?> GetVoyagerAgentById(Guid id, CancellationToken ct);
 
-    Task<List<VoyagerCommand>> GetVoyagerCommandsByAgentId(Guid agentId, CancellationToken ct);
+    Task<List<VoyagerCommand>> GetPendingCommandsByAgentId(Guid agentId, CancellationToken ct);
 
     Task<Guid> RegisterVoyagerAgent(string name, string passwordHash, Guid tenantId, CancellationToken ct);
+
+    Task<VoyagerCommandAssignment?> GetCommandAssignmentByAgentId(Guid agentId, CancellationToken ct);
 }

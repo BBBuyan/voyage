@@ -1,9 +1,9 @@
-using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Voyager.Application.Abstractions;
+using Voyager.Domain.Helpers;
 using Voyager.Domain.Models;
 
 namespace Voyager.Infrastructure.Storage;
@@ -11,14 +11,13 @@ namespace Voyager.Infrastructure.Storage;
 public class EnrollmentCredentialsStore : BaseLocalStore, IEnrollmentCredentialsStore
 {
     private readonly string _enrollmentCredentialsFilePath;
-    private readonly string _enrollmentCredentialsFileName = "voyager-enrollment-credentials.json";
 
     public EnrollmentCredentialsStore()
     {
-        _enrollmentCredentialsFilePath = Path.Combine(_commonApplicationPath, _enrollmentCredentialsFileName);
+        _enrollmentCredentialsFilePath = Path.Combine(_commonApplicationPath, AgentFileNames.EnrollmentCredentialsFileName);
     }
 
-    public async Task<EnrollmentCredentials?> ReadEnrollmentCredentials(CancellationToken ct)
+    public async Task<EnrollmentCredentials?> ReadEnrollmentCredentialsAsync(CancellationToken ct)
     {
         try
         {
@@ -26,19 +25,10 @@ public class EnrollmentCredentialsStore : BaseLocalStore, IEnrollmentCredentials
                 return null;
 
             string json = await File.ReadAllTextAsync(_enrollmentCredentialsFilePath, ct);
-            if (string.IsNullOrWhiteSpace(json))
-                return null;
-
             EnrollmentCredentials? creds = JsonSerializer.Deserialize<EnrollmentCredentials>(json);
-            if (creds is null)
-                return null;
 
-            if (creds.TenantId == Guid.Empty)
+            if (creds is null || !creds.IsValid())
                 return null;
-
-            if (string.IsNullOrWhiteSpace(creds.EnrollmentSecret))
-                return null;
-
             return creds;
         }
         catch
@@ -49,9 +39,13 @@ public class EnrollmentCredentialsStore : BaseLocalStore, IEnrollmentCredentials
 
     public void DeleteEnrollmentToken()
     {
-        if (!File.Exists(_enrollmentCredentialsFilePath))
+        try
         {
-            File.Delete(_enrollmentCredentialsFilePath);
+            if (!File.Exists(_enrollmentCredentialsFilePath))
+            {
+                File.Delete(_enrollmentCredentialsFilePath);
+            }
         }
+        catch { }
     }
 }

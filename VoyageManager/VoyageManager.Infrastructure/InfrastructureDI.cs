@@ -28,6 +28,7 @@ public static class InfrastructureDI
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<IVoyagePasswordHasher, VoyagePasswordHasher>();
         services.AddScoped<IVoyageTokenProvider, AgentTokenProvider>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

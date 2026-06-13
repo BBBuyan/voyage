@@ -15,7 +15,7 @@ public interface IAgentService
     /// <param name="agentId"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task<ErrorOr<List<CommandAssignment>>> CheckIn(Guid agentId, CancellationToken ct);
+    Task<ErrorOr<List<CheckInResponse>>> CheckIn(Guid agentId, CancellationToken ct);
 
     /// <summary>
     /// 
@@ -31,5 +31,7 @@ public interface IAgentService
     /// <param name="request"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task<ErrorOr<string>> GetToken(TokenRequest request, CancellationToken ct);
+    Task<ErrorOr<TokenResult>> GetToken(TokenRequest request, CancellationToken ct);
+
+    Task<ErrorOr<CommandStatusResponse>> HandleCommandReports(Guid agentId, CommandStatusRequest request, CancellationToken ct);
 }

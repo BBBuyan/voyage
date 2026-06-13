@@ -6,7 +6,7 @@ namespace Voyager.Application.Abstractions;
 
 public interface IEnrollmentCredentialsStore
 {
-    Task<EnrollmentCredentials?> ReadEnrollmentCredentials(CancellationToken ct);
+    Task<EnrollmentCredentials?> ReadEnrollmentCredentialsAsync(CancellationToken ct);
 
     void DeleteEnrollmentToken();
 }

@@ -4,9 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using VoyageManager.Application.Abstractions;
-using VoyageManager.Application.Results;
+using VoyageManager.Application.DTOs;
+using VoyageManager.Application.Interfaces;
 
-namespace VoyageManager.Application.AgentManagement;
+namespace VoyageManager.Application.Services;
 
 public class AgentManagementService : IAgentManagementService
 {

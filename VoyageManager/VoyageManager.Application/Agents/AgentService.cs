@@ -6,6 +6,8 @@ using AutoMapper;
 using ErrorOr;
 using VoyageManager.Application.Abstractions;
 using VoyageManager.Conventions.Agents;
+using VoyageManager.Conventions.Enums;
+using VoyageManager.Domain.Enums;
 using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Application.Agents;
@@ -16,6 +18,7 @@ internal class AgentService : IAgentService
     private readonly IAgentRespository _voyagerAgentRespository;
     private readonly IVoyagePasswordHasher _voyagePasswordHasher;
     private readonly IVoyageTokenProvider _voyageTokenProvider;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public AgentService(
@@ -23,6 +26,7 @@ internal class AgentService : IAgentService
         IAgentRespository voyagerHostRespository,
         IVoyagePasswordHasher voyagePasswordHasher,
         IVoyageTokenProvider voyageTokenProvider,
+        IUnitOfWork unitOfWork,
         IMapper mapper
         )
     {
@@ -30,28 +34,8 @@ internal class AgentService : IAgentService
         _voyagerAgentRespository = voyagerHostRespository;
         _voyagePasswordHasher = voyagePasswordHasher;
         _voyageTokenProvider = voyageTokenProvider;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
-    }
-
-    public async Task<ErrorOr<List<CommandAssignment>>> CheckIn(Guid agentId, CancellationToken ct)
-    {
-        VoyagerAgent? agent = await _voyagerAgentRespository
-            .GetVoyagerAgentById(agentId, ct);
-
-        if (agent == null)
-        {
-            return Error.NotFound(description: "Agent not found.");
-        }
-
-        if (!agent.IsEnabled)
-        {
-            return Error.Forbidden(description: "Agent is disabled.");
-        }
-
-        List<VoyagerCommand> commands = await _voyagerAgentRespository
-            .GetVoyagerCommandsByAgentId(agentId, ct);
-
-        return _mapper.Map<List<CommandAssignment>>(commands);
     }
 
     public async Task<ErrorOr<Guid>> Enroll(EnrollRequest request, CancellationToken ct)
@@ -83,7 +67,7 @@ internal class AgentService : IAgentService
         return agentId;
     }
 
-    public async Task<ErrorOr<string>> GetToken(TokenRequest request, CancellationToken ct)
+    public async Task<ErrorOr<TokenResult>> GetToken(TokenRequest request, CancellationToken ct)
     {
         VoyagerAgent? agent = await _voyagerAgentRespository
             .GetVoyagerAgentById(request.AgentId, ct);
@@ -99,7 +83,75 @@ internal class AgentService : IAgentService
             return Error.Unauthorized(description: "Invalid Password.");
         }
 
-        string token = _voyageTokenProvider.GenerateJwtToken(request.AgentId);
-        return token;
+        int expirationInSeconds = (int)TimeSpan.FromHours(6).TotalSeconds;
+        string token = _voyageTokenProvider.GenerateJwtToken(request.AgentId, expirationInSeconds);
+        TokenResult result = new()
+        {
+            AccessToken = token,
+            ExpiresIn = expirationInSeconds,
+        };
+        return result;
+    }
+
+    public async Task<ErrorOr<List<CheckInResponse>>> CheckIn(Guid agentId, CancellationToken ct)
+    {
+        VoyagerAgent? agent = await _voyagerAgentRespository
+            .GetVoyagerAgentById(agentId, ct);
+
+        if (agent == null)
+        {
+            return Error.NotFound(description: "Agent not found.");
+        }
+
+        if (!agent.IsEnabled)
+        {
+            return Error.Forbidden(description: "Agent is disabled.");
+        }
+
+        List<VoyagerCommand> commands = await _voyagerAgentRespository
+            .GetPendingCommandsByAgentId(agentId, ct);
+
+        return _mapper.Map<List<CheckInResponse>>(commands);
+    }
+
+    /// <summary>
+    /// Handles the command status report that agent has sent.
+    /// </summary>
+    /// <remarks>
+    /// If command assignment is not found for the specified agent, 
+    /// returns <see cref="ConventionCommandResponseType.Stop"/> to stop the agent
+    /// running a command that it is not supposed to.
+    /// </remarks>
+    public async Task<ErrorOr<CommandStatusResponse>> HandleCommandReports(Guid agentId, CommandStatusRequest request, CancellationToken ct)
+    {
+        VoyagerCommandAssignment? commandAssignment = await _voyagerAgentRespository
+            .GetCommandAssignmentByAgentId(agentId, ct);
+
+        if (commandAssignment == null)
+        {
+            return CommandStatusResponse.Stop();
+        }
+        VoyagerCommandStatus localStatus = commandAssignment.Status;
+
+        if (localStatus == VoyagerCommandStatus.Succeeded
+            || localStatus == VoyagerCommandStatus.Cancelled)
+        {
+            return CommandStatusResponse.Stop();
+        }
+
+        commandAssignment.Status = (VoyagerCommandStatus)request.CommandStatus;
+
+        if (request.CommandStatus == ConventionCommandStatus.InProgress)
+        {
+            commandAssignment.StartedAt = DateTimeOffset.UtcNow;
+        }
+        if (request.CommandStatus == ConventionCommandStatus.Succeeded)
+        {
+            commandAssignment.FinishedAt = DateTimeOffset.UtcNow;
+        }
+
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return CommandStatusResponse.Continue();
     }
 }

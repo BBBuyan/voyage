@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VoyageManager\VoyageManager.Domain\VoyageManager.Domain.csproj" />
     <ProjectReference Include="..\Voyager\Voyager.Domain\Voyager.Domain.csproj" />
   </ItemGroup>
 

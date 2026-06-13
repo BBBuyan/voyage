@@ -1,16 +1,17 @@
-using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using VoyageManager.Conventions.Agents;
+using Voyager.Domain.Models;
 
 namespace Voyager.Application.Abstractions;
 
 public interface IVoyageManagerClient
 {
-    Task<Guid> SendEnrollRequest(EnrollRequest request);
+    Task<VoyagerAgentCredentials> SendEnrollRequestAsync(EnrollmentCredentials enrollmentCreds, CancellationToken ct);
 
-    Task CheckIn();
+    Task<List<AgentCommand>> CheckInAsync(string token, CancellationToken ct);
 
-    Task GetToken(TokenRequest request);
+    Task<AgentToken> FetchTokenAsync(VoyagerAgentCredentials creds, CancellationToken ct);
 
-    Task SendResults();
+    Task SendCommandStatus(string token, AgentCommand agentCommand, CancellationToken ct);
 }

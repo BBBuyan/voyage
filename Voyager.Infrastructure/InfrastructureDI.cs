@@ -18,7 +18,6 @@ public static class InfrastructureDI
 
         services.AddSingleton<IAgentCredentialsStore, AgentCredentialsStore>();
         services.AddSingleton<IEnrollmentCredentialsStore, EnrollmentCredentialsStore>();
-        services.AddSingleton<IPasswordGenerator, PasswordGenerator>();
         return services;
     }
 }

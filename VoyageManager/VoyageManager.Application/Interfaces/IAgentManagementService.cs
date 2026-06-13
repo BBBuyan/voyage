@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using VoyageManager.Application.Results;
+using VoyageManager.Application.DTOs;
 
-namespace VoyageManager.Application.AgentManagement;
+namespace VoyageManager.Application.Interfaces;
 
 public interface IAgentManagementService
 {

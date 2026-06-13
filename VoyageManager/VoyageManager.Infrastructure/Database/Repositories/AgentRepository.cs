@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using VoyageManager.Application.Abstractions;
-using VoyageManager.Conventions.Enums;
+using VoyageManager.Domain.Enums;
 using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Infrastructure.Database.Repositories;
@@ -19,7 +19,12 @@ public class AgentRepository : IAgentRespository
         _dbContext = dbContext;
     }
 
-    public async Task<List<VoyagerCommand>> GetVoyagerCommandsByAgentId(Guid agentId, CancellationToken ct)
+    public async Task<VoyagerCommandAssignment?> GetCommandAssignmentByAgentId(Guid agentId, CancellationToken ct)
+    {
+        return await _dbContext.VoyagerCommandAssignments.FirstOrDefaultAsync(x => x.Id == agentId, ct);
+    }
+
+    public async Task<List<VoyagerCommand>> GetPendingCommandsByAgentId(Guid agentId, CancellationToken ct)
     {
         return await _dbContext.VoyagerCommandAssignments
             .Where(x => x.VoyagerAgentId == agentId && x.Status == VoyagerCommandStatus.Pending)
