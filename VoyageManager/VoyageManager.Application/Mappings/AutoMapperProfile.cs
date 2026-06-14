@@ -14,5 +14,7 @@ public sealed class AutoMapperProfile : Profile
         CreateMap<VoyagerAgent, VoyagerAgentDTO>();
         CreateMap<VoyagerCommandType, ConventionCommandType>();
         CreateMap<VoyagerCommand, CheckInResponse>();
+        CreateMap<VoyagerCommand, VoyagerCommandDTO>();
+        CreateMap<VoyagerCommandAssignment, VoyagerCommandAssignmentDTO>();
     }
 }

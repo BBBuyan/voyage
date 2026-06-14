@@ -28,6 +28,7 @@ public class AgentRepository : IAgentRespository
     {
         return await _dbContext.VoyagerCommandAssignments
             .Where(x => x.VoyagerAgentId == agentId && x.Status == VoyagerCommandStatus.Pending)
+            .OrderBy(x => x.CreatedAt)
             .Include(x => x.VoyagerCommand)
             .Select(x => x.VoyagerCommand)
             .ToListAsync(ct);

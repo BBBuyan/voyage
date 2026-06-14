@@ -12,6 +12,7 @@ public static class ApplicationDI
     {
         services.AddScoped<IAgentService, AgentService>();
         services.AddScoped<IAgentManagementService, AgentManagementService>();
+        services.AddScoped<ICommandManagementService, CommandManagementService>();
         services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
 
         return services;

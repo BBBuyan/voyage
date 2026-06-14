@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VoyageManager.Domain.Models;
 
@@ -6,9 +8,8 @@ namespace VoyageManager.Application.Abstractions;
 
 public interface ICommandManagementRepository
 {
-    Task CreateCommandForAgent(Guid agentId, VoyagerCommand command);
-
-    Task CreateCommandForGroup(Guid groupId, VoyagerCommand command);
-
-    Task CreateCommandForAll(VoyagerCommand command);
+    Task<int> CreateCommandAsync(VoyagerCommand command, CancellationToken ct);
+    Task<VoyagerCommand?> GetVoyagerCommandByIdAsync(Guid id, CancellationToken ct);
+    Task<List<VoyagerCommand>> GetVoyagerCommandsAsync(CancellationToken ct);
+    Task<List<VoyagerCommandAssignment>> GetVoyagerCommandAssignmentsByCommandIdAsync(Guid commandId, CancellationToken ct);
 }

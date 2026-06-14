@@ -12,7 +12,7 @@ public class VoyagerCommand
 
     public VoyagerTargetType TargetType { get; set; }
 
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     public string? CreatedBy { get; set; }
 

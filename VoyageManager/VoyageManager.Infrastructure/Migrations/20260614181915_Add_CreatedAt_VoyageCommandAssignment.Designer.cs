@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VoyageManager.Infrastructure.Database;
@@ -11,9 +12,11 @@ using VoyageManager.Infrastructure.Database;
 namespace VoyageManager.Infrastructure.Migrations
 {
     [DbContext(typeof(VoyageManagerDbContext))]
-    partial class VoyageManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260614181915_Add_CreatedAt_VoyageCommandAssignment")]
+    partial class Add_CreatedAt_VoyageCommandAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,10 +119,10 @@ namespace VoyageManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("FinishedAt")
+                    b.Property<DateTimeOffset>("FinishedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("StartedAt")
+                    b.Property<DateTimeOffset>("StartedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
