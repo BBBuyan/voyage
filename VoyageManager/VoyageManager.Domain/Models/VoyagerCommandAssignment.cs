@@ -19,6 +19,8 @@ public class VoyagerCommandAssignment
     /// </summary>
     public VoyagerCommandStatus Status { get; set; }
 
-    public DateTimeOffset StartedAt { get; set; }
-    public DateTimeOffset FinishedAt { get; set; }
+    public DateTimeOffset? StartedAt { get; set; }
+    public DateTimeOffset? FinishedAt { get; set; }
+
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

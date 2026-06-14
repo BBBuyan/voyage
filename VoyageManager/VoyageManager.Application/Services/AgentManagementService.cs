@@ -28,6 +28,11 @@ public class AgentManagementService : IAgentManagementService
         return _mapper.Map<List<VoyagerAgentDTO>>(await _agentManagementRespository.GetVoyagerAgents(ct));
     }
 
+    public async Task<List<VoyagerAgentDTO>> GetAgentsByGroupId(Guid groupId, CancellationToken ct)
+    {
+        return _mapper.Map<List<VoyagerAgentDTO>>(await _agentManagementRespository.GetVoyagerAgents(ct));
+    }
+
     public async Task<int> EnableAgentById(Guid agentId, CancellationToken ct)
     {
         return await _agentManagementRespository.EnableAgentById(agentId, ct);
