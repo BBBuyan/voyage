@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Voyager.Domain.Models;
@@ -9,7 +8,7 @@ public interface IVoyageManagerClient
 {
     Task<VoyagerAgentCredentials> SendEnrollRequestAsync(EnrollmentCredentials enrollmentCreds, CancellationToken ct);
 
-    Task<List<AgentCommand>> CheckInAsync(string token, CancellationToken ct);
+    Task<AgentCommand?> CheckInAsync(string token, CancellationToken ct);
 
     Task<AgentToken> FetchTokenAsync(VoyagerAgentCredentials creds, CancellationToken ct);
 

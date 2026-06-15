@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using VoyageManager.Conventions.Agents;
 using VoyageManager.Conventions.Enums;
 using Voyager.Application.Abstractions;
@@ -18,6 +18,7 @@ namespace Voyager.Infrastructure.Clients;
 public class VoyageManagerClient : IVoyageManagerClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger<VoyageManagerClient> _logger;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -28,9 +29,10 @@ public class VoyageManagerClient : IVoyageManagerClient
         }
     };
 
-    public VoyageManagerClient(HttpClient client)
+    public VoyageManagerClient(HttpClient client, ILogger<VoyageManagerClient> logger)
     {
         _httpClient = client;
+        _logger = logger;
     }
 
     public async Task<VoyagerAgentCredentials> SendEnrollRequestAsync(EnrollmentCredentials enrollmentCreds, CancellationToken ct)
@@ -84,7 +86,7 @@ public class VoyageManagerClient : IVoyageManagerClient
         return agentToken;
     }
 
-    public async Task<List<AgentCommand>> CheckInAsync(string token, CancellationToken ct)
+    public async Task<AgentCommand?> CheckInAsync(string token, CancellationToken ct)
     {
         using HttpRequestMessage requestMessage = new(HttpMethod.Get, "check-in");
         requestMessage.Headers.Authorization = new("Bearer", token);
@@ -92,21 +94,18 @@ public class VoyageManagerClient : IVoyageManagerClient
         using HttpResponseMessage response = await _httpClient.SendAsync(requestMessage, ct);
         response.EnsureSuccessStatusCode();
 
-        List<CheckInResponse>? checkInResponses = await response.Content
-            .ReadFromJsonAsync<List<CheckInResponse>>(JsonOptions, ct);
-        List<AgentCommand> result = [];
-        if (checkInResponses is null)
-            return result;
+        CheckInResponse? checkInResponse = await response.Content
+            .ReadFromJsonAsync<CheckInResponse>(JsonOptions, ct);
+        if (checkInResponse is null)
+            return null;
 
-        foreach (CheckInResponse checkInResponse in checkInResponses)
+        AgentCommand result = new()
         {
-            result.Add(new()
-            {
-                Id = checkInResponse.Id,
-                CommandType = (AgentCommandType)checkInResponse.CommandType,
-                Status = AgentCommandStatus.InProgress,
-            });
-        }
+            Id = checkInResponse.Id,
+            CommandType = (AgentCommandType)checkInResponse.CommandType,
+            Status = AgentCommandStatus.InProgress,
+        };
+
         return result;
     }
 
@@ -114,10 +113,9 @@ public class VoyageManagerClient : IVoyageManagerClient
     {
         CommandStatusRequest requestContent = new()
         {
-            CommandId = agentCommand.Id,
             CommandStatus = (ConventionCommandStatus)agentCommand.Status
         };
-        using HttpRequestMessage requestMessage = new(HttpMethod.Post, "command-status");
+        using HttpRequestMessage requestMessage = new(HttpMethod.Post, $"commands/{agentCommand.Id}/status");
         requestMessage.Headers.Authorization = new("Bearer", token);
         requestMessage.Content = JsonContent.Create(requestContent, options: JsonOptions);
 
@@ -125,7 +123,7 @@ public class VoyageManagerClient : IVoyageManagerClient
             .SendAsync(requestMessage, ct);
         response.EnsureSuccessStatusCode();
 
-        //CommandStatusResponse? commandStatusResponse = await response.Content
-        //    .ReadFromJsonAsync<CommandStatusResponse>(JsonOptions, ct);
+        CommandStatusResponse? commandStatusResponse = await response.Content
+            .ReadFromJsonAsync<CommandStatusResponse>(JsonOptions, ct);
     }
 }

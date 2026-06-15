@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,29 +18,31 @@ public class AgentRepository : IAgentRespository
         _dbContext = dbContext;
     }
 
-    public async Task<VoyagerCommandAssignment?> GetCommandAssignmentByAgentId(Guid agentId, CancellationToken ct)
-    {
-        return await _dbContext.VoyagerCommandAssignments.FirstOrDefaultAsync(x => x.Id == agentId, ct);
-    }
-
-    public async Task<List<VoyagerCommand>> GetPendingCommandsByAgentId(Guid agentId, CancellationToken ct)
+    public async Task<VoyagerCommandAssignment?> GetCommandAssignmentAsync(Guid agentId, Guid commandId, CancellationToken ct)
     {
         return await _dbContext.VoyagerCommandAssignments
-            .Where(x => x.VoyagerAgentId == agentId && x.Status == VoyagerCommandStatus.Pending)
-            .OrderBy(x => x.CreatedAt)
-            .Include(x => x.VoyagerCommand)
-            .Select(x => x.VoyagerCommand)
-            .ToListAsync(ct);
+            .FirstOrDefaultAsync(x => x.VoyagerAgentId == agentId && x.VoyagerCommandId == commandId, ct);
     }
 
-    public async Task<VoyagerAgent?> GetVoyagerAgentById(Guid id, CancellationToken ct)
+    public async Task<VoyagerCommand?> GetPendingCommandAsync(Guid agentId, CancellationToken ct)
+    {
+        return await _dbContext.VoyagerCommandAssignments
+            .Where(x =>
+                x.VoyagerAgentId == agentId &&
+                x.Status == VoyagerCommandStatus.Pending)
+            .OrderBy(x => x.CreatedAt)
+            .Select(x => x.VoyagerCommand)
+            .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<VoyagerAgent?> GetAgentAsync(Guid id, CancellationToken ct)
     {
         return await _dbContext
             .VoyagerAgents
             .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
-    public async Task<Guid> RegisterVoyagerAgent(string name, string passwordHash, Guid tenantId, CancellationToken ct)
+    public async Task<Guid> RegisterAgentAsync(string name, string passwordHash, Guid tenantId, CancellationToken ct)
     {
         VoyagerAgent newVoyagerHost = new()
         {

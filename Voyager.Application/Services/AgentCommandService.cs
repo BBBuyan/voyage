@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Voyager.Application.Abstractions;
@@ -16,7 +15,7 @@ public class AgentCommandService : IAgentCommandService
         _voyageManagerClient = client;
     }
 
-    public async Task<List<AgentCommand>> GetAssignedCommands(string token, CancellationToken ct)
+    public async Task<AgentCommand?> GetAssignedCommand(string token, CancellationToken ct)
     {
         return await _voyageManagerClient.CheckInAsync(token, ct);
     }

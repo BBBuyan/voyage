@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ErrorOr;
+using Microsoft.Extensions.Logging;
 using VoyageManager.Application.Abstractions;
 using VoyageManager.Conventions.Agents;
 using VoyageManager.Conventions.Enums;
@@ -12,7 +12,7 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Application.Agents;
 
-internal class AgentService : IAgentService
+public class AgentService : IAgentService
 {
     private readonly ITenantRepository _tenantRepository;
     private readonly IAgentRespository _voyagerAgentRespository;
@@ -20,6 +20,7 @@ internal class AgentService : IAgentService
     private readonly IVoyageTokenProvider _voyageTokenProvider;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ILogger<AgentService> _logger;
 
     public AgentService(
         ITenantRepository tenantRepository,
@@ -27,7 +28,8 @@ internal class AgentService : IAgentService
         IVoyagePasswordHasher voyagePasswordHasher,
         IVoyageTokenProvider voyageTokenProvider,
         IUnitOfWork unitOfWork,
-        IMapper mapper
+        IMapper mapper,
+        ILogger<AgentService> logger
         )
     {
         _tenantRepository = tenantRepository;
@@ -36,9 +38,10 @@ internal class AgentService : IAgentService
         _voyageTokenProvider = voyageTokenProvider;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _logger = logger;
     }
 
-    public async Task<ErrorOr<Guid>> Enroll(EnrollRequest request, CancellationToken ct)
+    public async Task<ErrorOr<Guid>> EnrollAsync(EnrollRequest request, CancellationToken ct)
     {
         // Stage 1, validation
         Tenant? tenant = await _tenantRepository
@@ -62,15 +65,15 @@ internal class AgentService : IAgentService
         // Stage 2, creation
         string hashedPassword = _voyagePasswordHasher.HashPassword(request.Password);
         Guid agentId = await _voyagerAgentRespository
-            .RegisterVoyagerAgent(request.Name, hashedPassword, request.TenantId, ct);
+            .RegisterAgentAsync(request.Name, hashedPassword, request.TenantId, ct);
 
         return agentId;
     }
 
-    public async Task<ErrorOr<TokenResult>> GetToken(TokenRequest request, CancellationToken ct)
+    public async Task<ErrorOr<TokenResult>> GetTokenAsync(TokenRequest request, CancellationToken ct)
     {
         VoyagerAgent? agent = await _voyagerAgentRespository
-            .GetVoyagerAgentById(request.AgentId, ct);
+            .GetAgentAsync(request.AgentId, ct);
 
         if (agent is null)
         {
@@ -93,25 +96,21 @@ internal class AgentService : IAgentService
         return result;
     }
 
-    public async Task<ErrorOr<List<CheckInResponse>>> CheckIn(Guid agentId, CancellationToken ct)
+    public async Task<ErrorOr<CheckInResponse>> CheckInAsync(Guid agentId, CancellationToken ct)
     {
         VoyagerAgent? agent = await _voyagerAgentRespository
-            .GetVoyagerAgentById(agentId, ct);
+            .GetAgentAsync(agentId, ct);
 
         if (agent == null)
-        {
             return Error.NotFound(description: "Agent not found.");
-        }
 
         if (!agent.IsEnabled)
-        {
             return Error.Forbidden(description: "Agent is disabled.");
-        }
 
-        List<VoyagerCommand> commands = await _voyagerAgentRespository
-            .GetPendingCommandsByAgentId(agentId, ct);
+        VoyagerCommand? commands = await _voyagerAgentRespository
+            .GetPendingCommandAsync(agentId, ct);
 
-        return _mapper.Map<List<CheckInResponse>>(commands);
+        return _mapper.Map<CheckInResponse>(commands);
     }
 
     /// <summary>
@@ -122,21 +121,26 @@ internal class AgentService : IAgentService
     /// returns <see cref="ConventionCommandResponseType.Stop"/> to stop the agent
     /// running a command that it is not supposed to.
     /// </remarks>
-    public async Task<ErrorOr<CommandStatusResponse>> HandleCommandReports(Guid agentId, CommandStatusRequest request, CancellationToken ct)
+    public async Task<ErrorOr<CommandStatusResponse>> UpdateCommandStatusAsync(
+        Guid agentId,
+        Guid commandId,
+        CommandStatusRequest request,
+        CancellationToken ct
+        )
     {
         VoyagerCommandAssignment? commandAssignment = await _voyagerAgentRespository
-            .GetCommandAssignmentByAgentId(agentId, ct);
+            .GetCommandAssignmentAsync(agentId, commandId, ct);
 
         if (commandAssignment == null)
         {
-            return CommandStatusResponse.Stop();
+            return Error.NotFound(description: "CommandAssignment not found");
         }
         VoyagerCommandStatus localStatus = commandAssignment.Status;
 
         if (localStatus == VoyagerCommandStatus.Succeeded
             || localStatus == VoyagerCommandStatus.Cancelled)
         {
-            return CommandStatusResponse.Stop();
+            return new CommandStatusResponse() { ResponseType = ConventionCommandResponseType.Stop };
         }
 
         commandAssignment.Status = (VoyagerCommandStatus)request.CommandStatus;
@@ -152,6 +156,6 @@ internal class AgentService : IAgentService
 
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return CommandStatusResponse.Continue();
+        return new CommandStatusResponse() { ResponseType = ConventionCommandResponseType.Continue };
     }
 }
