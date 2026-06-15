@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ErrorOr;
@@ -41,7 +40,7 @@ public class AgentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Guid>> Enroll([FromBody] EnrollRequest enrollRequest, CancellationToken ct)
     {
-        ErrorOr<Guid> result = await _agentService.Enroll(enrollRequest, ct);
+        ErrorOr<Guid> result = await _agentService.EnrollAsync(enrollRequest, ct);
         Console.WriteLine(result);
 
         return result.MatchFirst<ActionResult>(
@@ -60,7 +59,7 @@ public class AgentsController : ControllerBase
     [HttpGet("check-in")]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<CheckInResponse>>> CheckIn(CancellationToken ct)
+    public async Task<ActionResult<CheckInResponse>> CheckIn(CancellationToken ct)
     {
         string? agentIdString = User.FindFirst("sub")?.Value;
 
@@ -69,7 +68,7 @@ public class AgentsController : ControllerBase
             return BadRequest("Invalid AgentId");
         }
 
-        ErrorOr<List<CheckInResponse>> result = await _agentService.CheckIn(agentId, ct);
+        ErrorOr<CheckInResponse> result = await _agentService.CheckInAsync(agentId, ct);
 
         return result.MatchFirst<ActionResult>(
             value => Ok(value),
@@ -91,7 +90,7 @@ public class AgentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TokenResult>> Token([FromBody] TokenRequest tokenRequest, CancellationToken ct)
     {
-        ErrorOr<TokenResult> result = await _agentService.GetToken(tokenRequest, ct);
+        ErrorOr<TokenResult> result = await _agentService.GetTokenAsync(tokenRequest, ct);
 
         return result.MatchFirst<ActionResult>(
             onValue => Ok(onValue),
@@ -107,8 +106,8 @@ public class AgentsController : ControllerBase
     /// Report the command results.
     /// </summary>
     /// <returns></returns>
-    [HttpPost("command-status")]
-    public async Task<ActionResult<CommandStatusResponse>> Result([FromBody] CommandStatusRequest request, CancellationToken ct)
+    [HttpPost("commands/{id}/status")]
+    public async Task<ActionResult<CommandStatusResponse>> UpdateCommandStatus(Guid id, [FromBody] CommandStatusRequest request, CancellationToken ct)
     {
         string? agentIdString = User.FindFirst("sub")?.Value;
 
@@ -117,11 +116,15 @@ public class AgentsController : ControllerBase
             return BadRequest("Invalid AgentId");
         }
 
-        ErrorOr<CommandStatusResponse> result = await _agentService.HandleCommandReports(agentId, request, ct);
+        ErrorOr<CommandStatusResponse> result = await _agentService
+            .UpdateCommandStatusAsync(agentId, id, request, ct);
 
         return result.MatchFirst<ActionResult>(
-            onValue => Ok(onValue),
-            onError => Problem()
-            );
+            value => Ok(value),
+            err => err.Type switch
+            {
+                ErrorType.NotFound => NotFound(err.Description),
+                _ => Problem()
+            });
     }
 }

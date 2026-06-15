@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -34,16 +34,18 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
         while (!ct.IsCancellationRequested)
         {
             AgentToken agentToken = await _agentTokenProvider.GetTokenAsync(agentCredentials, ct);
-            _logger.LogInformation($"AgentToken {agentToken.Value}");
-            List<AgentCommand> assignedCommands = await _agentCommandService.GetAssignedCommands(agentToken.Value, ct);
-            _logger.LogInformation($"AssignedCommands {assignedCommands.Count}");
-
-            foreach (AgentCommand assignedCommand in assignedCommands)
+            AgentCommand? assignedCommand = await _agentCommandService.GetAssignedCommand(agentToken.Value, ct);
+            if (assignedCommand != null)
             {
-                // AssignedCommand execution logic
-
-                assignedCommand.Status = Domain.Enums.AgentCommandStatus.Succeeded;
-
+                _logger.LogInformation("Executing {CommandId}, {CommandType}", assignedCommand.Id, assignedCommand.CommandType.ToString());
+                try
+                {
+                    //assignedCommand.Status = Domain.Enums.AgentCommandStatus.Succeeded;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(message: ex.Message);
+                }
                 await _agentCommandService.SendCommandStatusAsync(agentToken.Value, assignedCommand, ct);
             }
 
