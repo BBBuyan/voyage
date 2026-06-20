@@ -14,7 +14,7 @@ using VoyageManager.Domain.Enums;
 namespace VoyageManager.Api.Controllers;
 
 [ApiController]
-[Route("api/commands")]
+[Route("api/v1/commands")]
 [ProducesResponseType(StatusCodes.Status400BadRequest)]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class CommandManagementController : ControllerBase

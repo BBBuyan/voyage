@@ -7,7 +7,7 @@ using VoyageManager.Application.DTOs;
 namespace VoyageManager.Api.Controllers;
 
 [ApiController]
-[Route("api/groups")]
+[Route("api/v1/groups")]
 public class GroupManagementController : ControllerBase
 {
     [AllowAnonymous]

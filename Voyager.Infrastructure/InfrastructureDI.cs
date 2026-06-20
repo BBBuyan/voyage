@@ -13,7 +13,7 @@ public static class InfrastructureDI
     {
         services.AddHttpClient<IVoyageManagerClient, VoyageManagerClient>(client =>
         {
-            client.BaseAddress = new Uri("https://localhost:7216/api/agents/");
+            client.BaseAddress = new Uri("https://localhost:7216/api/v1/agents/");
         });
 
         services.AddSingleton<IAgentCredentialsStore, AgentCredentialsStore>();

@@ -15,7 +15,7 @@ namespace VoyageManager.Api.Controllers;
 /// Endpoints are designated only for machine to machine communication.
 /// </summary>
 [ApiController]
-[Route("api/agents")]
+[Route("api/v1/agents")]
 [Consumes("application/json")]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,6 +57,7 @@ public class AgentsController : ControllerBase
     /// Check whether commands exists or not.
     /// </summary>
     [HttpGet("check-in")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CheckInResponse>> CheckIn(CancellationToken ct)
@@ -65,7 +66,7 @@ public class AgentsController : ControllerBase
 
         if (!Guid.TryParse(agentIdString, out Guid agentId))
         {
-            return BadRequest("Invalid AgentId");
+            return BadRequest("Invalid AgentId in token");
         }
 
         ErrorOr<CheckInResponse> result = await _agentService.CheckInAsync(agentId, ct);
