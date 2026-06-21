@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Voyager.Application\Voyager.Application.csproj" />
-    <ProjectReference Include="..\..\Voyager.Infrastructure\Voyager.Infrastructure.csproj" />
+    <ProjectReference Include="..\Voyager.Application\Voyager.Application.csproj" />
+    <ProjectReference Include="..\Voyager.Infrastructure\Voyager.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

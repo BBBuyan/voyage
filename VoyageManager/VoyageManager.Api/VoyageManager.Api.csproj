@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Voyage.Contracts\VoyageManager.Conventions.csproj" />
     <ProjectReference Include="..\VoyageManager.Infrastructure\VoyageManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Voyager.Conventions\VoyageManager.Conventions.csproj" />
   </ItemGroup>
 
 </Project>

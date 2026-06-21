@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Voyager.Application.Interfaces;
+using Voyager.Domain.Enums;
 using Voyager.Domain.Models;
 
 namespace Voyager.Application;
@@ -13,7 +14,6 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
     private readonly IAgentTokenProvider _agentTokenProvider;
     private readonly IAgentCredentialsProvider _agentCredentialsProvider;
     private readonly IAgentCommandService _agentCommandService;
-
 
     public VoyagerAgentRuntime(
         ILogger<VoyagerAgentRuntime> logger,
@@ -31,6 +31,7 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
     public async Task RunAsync(CancellationToken ct)
     {
         VoyagerAgentCredentials agentCredentials = await _agentCredentialsProvider.GetAgentCredentialsAsync(ct);
+
         while (!ct.IsCancellationRequested)
         {
             AgentToken agentToken = await _agentTokenProvider.GetTokenAsync(agentCredentials, ct);
@@ -41,7 +42,7 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
                 {
                     _logger.LogInformation("Executing {CommandId}, {CommandType}", assignedCommand.Id, assignedCommand.CommandType.ToString());
                     // Command Logic
-                    assignedCommand.Status = Domain.Enums.AgentCommandStatus.Succeeded;
+                    assignedCommand.Status = AgentCommandStatus.Succeeded;
                 }
                 catch (Exception ex)
                 {
