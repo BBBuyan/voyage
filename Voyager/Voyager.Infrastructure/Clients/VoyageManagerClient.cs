@@ -94,6 +94,11 @@ public class VoyageManagerClient : IVoyageManagerClient
         using HttpResponseMessage response = await _httpClient.SendAsync(requestMessage, ct);
         response.EnsureSuccessStatusCode();
 
+        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        {
+            return null;
+        }
+
         CheckInResponse? checkInResponse = await response.Content
             .ReadFromJsonAsync<CheckInResponse>(JsonOptions, ct);
         if (checkInResponse is null)

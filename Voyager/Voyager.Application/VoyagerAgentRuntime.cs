@@ -37,10 +37,11 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
             AgentCommand? assignedCommand = await _agentCommandService.GetAssignedCommand(agentToken.Value, ct);
             if (assignedCommand != null)
             {
-                _logger.LogInformation("Executing {CommandId}, {CommandType}", assignedCommand.Id, assignedCommand.CommandType.ToString());
                 try
                 {
-                    //assignedCommand.Status = Domain.Enums.AgentCommandStatus.Succeeded;
+                    _logger.LogInformation("Executing {CommandId}, {CommandType}", assignedCommand.Id, assignedCommand.CommandType.ToString());
+                    // Command Logic
+                    assignedCommand.Status = Domain.Enums.AgentCommandStatus.Succeeded;
                 }
                 catch (Exception ex)
                 {

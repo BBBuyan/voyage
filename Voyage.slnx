@@ -12,13 +12,15 @@
     <Project Path="VoyageManager/VoyageManager.Domain/VoyageManager.Domain.csproj" />
     <Project Path="VoyageManager/VoyageManager.Infrastructure/VoyageManager.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/Voyager.Conventions/">
+    <Project Path="Voyager.Conventions/VoyageManager.Conventions.csproj" />
+  </Folder>
   <Folder Name="/Voyager/">
     <File Path="Directory.Packages.props" />
-    <Project Path="Voyager.Application/Voyager.Application.csproj" Id="271274f9-50e6-4a1f-91e3-2dad2ee93952" />
-    <Project Path="Voyager.Infrastructure/Voyager.Infrastructure.csproj" Id="1385b855-dbc0-414c-a330-184caa430ff5" />
+    <Project Path="Voyager/Voyager.Application/Voyager.Application.csproj" />
     <Project Path="Voyager/Voyager.Domain/Voyager.Domain.csproj" />
+    <Project Path="Voyager/Voyager.Infrastructure/Voyager.Infrastructure.csproj" />
     <Project Path="Voyager/Voyager.Worker/Voyager.Worker.csproj" Id="f61b83f9-33bf-409e-97f2-1849bbe74551" />
   </Folder>
   <Project Path="Test/Test.csproj" Id="c821e99b-e8e4-47c8-a92b-d3b464ac969f" />
-  <Project Path="Voyage.Contracts/VoyageManager.Conventions.csproj" Id="718f9095-a595-42bf-a606-14dd1c559bf6" />
 </Solution>

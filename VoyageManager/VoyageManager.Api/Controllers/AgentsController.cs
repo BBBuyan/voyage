@@ -57,6 +57,7 @@ public class AgentsController : ControllerBase
     /// Check whether commands exists or not.
     /// </summary>
     [HttpGet("check-in")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
