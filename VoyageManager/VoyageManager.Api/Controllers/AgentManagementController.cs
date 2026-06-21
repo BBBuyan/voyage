@@ -11,7 +11,7 @@ using VoyageManager.Application.Interfaces;
 namespace VoyageManager.Api.Controllers;
 
 [ApiController]
-[Route("api/management/agents")]
+[Route("api/v1/management/agents")]
 [Consumes("application/json")]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status200OK)]

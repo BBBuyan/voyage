@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Http" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Voyager\Voyager.Domain\Voyager.Domain.csproj" />
+    <ProjectReference Include="..\Voyager.Application\Voyager.Application.csproj" />
+    <ProjectReference Include="..\..\Voyager.Conventions\VoyageManager.Conventions.csproj" />
+    <ProjectReference Include="..\Voyager.Domain\Voyager.Domain.csproj" />
   </ItemGroup>
 
 </Project>
