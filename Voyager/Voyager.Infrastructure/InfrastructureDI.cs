@@ -9,7 +9,10 @@ namespace Voyager.Infrastructure;
 
 public static class InfrastructureDI
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddHttpClient<IVoyageManagerClient, VoyageManagerClient>(client =>
         {

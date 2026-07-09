@@ -17,7 +17,8 @@ public class AgentCredentialsProvider : IAgentCredentialsProvider
     public AgentCredentialsProvider(
         IAgentCredentialsStore agentCredentialsStore,
         IEnrollmentCredentialsStore enrollmentCredentialsStore,
-        IVoyageManagerClient voyageManagerClient)
+        IVoyageManagerClient voyageManagerClient
+    )
     {
         _agentCredentialsStore = agentCredentialsStore;
         _enrollmentCredentialsStore = enrollmentCredentialsStore;
@@ -40,11 +41,15 @@ public class AgentCredentialsProvider : IAgentCredentialsProvider
 
     public async Task<VoyagerAgentCredentials> EnrollAsync(CancellationToken ct)
     {
-        EnrollmentCredentials? enrollmentCreds = await _enrollmentCredentialsStore.ReadEnrollmentCredentialsAsync(ct);
+        EnrollmentCredentials? enrollmentCreds =
+            await _enrollmentCredentialsStore.ReadEnrollmentCredentialsAsync(ct);
         if (enrollmentCreds is null)
             throw new InvalidOperationException("Could not read enrollment credentials.");
 
-        VoyagerAgentCredentials agentCreds = await _voyageManagerClient.SendEnrollRequestAsync(enrollmentCreds, ct);
+        VoyagerAgentCredentials agentCreds = await _voyageManagerClient.SendEnrollRequestAsync(
+            enrollmentCreds,
+            ct
+        );
 
         await _agentCredentialsStore.SaveAgentCredentialsAsync(agentCreds, ct);
         //_enrollmentCredentialsStore.DeleteEnrollmentToken();

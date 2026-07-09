@@ -15,12 +15,6 @@ public class VoyagerCommandTable : IEntityTypeConfiguration<VoyagerCommand>
             .IsRequired();
 
         builder
-            .Property(x => x.TargetType)
-            .HasConversion<string>()
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder
             .HasMany(x => x.CommandAssigments)
             .WithOne(x => x.VoyagerCommand)
             .HasForeignKey(x => x.VoyagerCommandId)

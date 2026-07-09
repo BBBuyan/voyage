@@ -11,7 +11,12 @@ public interface IAgentRespository
 
     Task<VoyagerCommand?> GetPendingCommandAsync(Guid agentId, CancellationToken ct);
 
-    Task<Guid> RegisterAgentAsync(string name, string passwordHash, Guid tenantId, CancellationToken ct);
-
     Task<VoyagerCommandAssignment?> GetCommandAssignmentAsync(Guid agentId, Guid commandId, CancellationToken ct);
+
+    Task<Guid> RegisterAgentAsync(
+        string name,
+        string hardwareId,
+        string passwordHash,
+        Guid tenantId,
+        CancellationToken ct);
 }

@@ -8,7 +8,7 @@ using VoyageManager.Domain.Enums;
 
 namespace VoyageManager.Application.Interfaces;
 
-public interface ICommandManagementService
+public interface ICommandService
 {
     Task<ErrorOr<VoyagerCommandDTO>> GetCommandByIdAsync(Guid commandId, CancellationToken ct);
 

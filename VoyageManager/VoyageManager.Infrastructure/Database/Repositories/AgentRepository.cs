@@ -42,13 +42,19 @@ public class AgentRepository : IAgentRespository
             .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
-    public async Task<Guid> RegisterAgentAsync(string name, string passwordHash, Guid tenantId, CancellationToken ct)
+    public async Task<Guid> RegisterAgentAsync(
+        string name,
+        string hardwareId,
+        string passwordHash,
+        Guid tenantId,
+        CancellationToken ct)
     {
         VoyagerAgent newVoyagerHost = new()
         {
             Name = name,
+            PasswordHash = passwordHash,
+            HardwareId = hardwareId,
             TenantId = tenantId,
-            PasswordHash = passwordHash
         };
         _dbContext.VoyagerAgents.Add(newVoyagerHost);
         await _dbContext.SaveChangesAsync(ct);

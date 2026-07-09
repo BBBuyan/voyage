@@ -14,7 +14,10 @@ public class EnrollmentCredentialsStore : BaseLocalStore, IEnrollmentCredentials
 
     public EnrollmentCredentialsStore()
     {
-        _enrollmentCredentialsFilePath = Path.Combine(_commonApplicationPath, AgentFileNames.EnrollmentCredentialsFileName);
+        _enrollmentCredentialsFilePath = Path.Combine(
+            _commonApplicationPath,
+            AgentFileNames.EnrollmentCredentialsFileName
+        );
     }
 
     public async Task<EnrollmentCredentials?> ReadEnrollmentCredentialsAsync(CancellationToken ct)

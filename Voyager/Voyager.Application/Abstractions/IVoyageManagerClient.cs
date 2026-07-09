@@ -6,7 +6,10 @@ namespace Voyager.Application.Abstractions;
 
 public interface IVoyageManagerClient
 {
-    Task<VoyagerAgentCredentials> SendEnrollRequestAsync(EnrollmentCredentials enrollmentCreds, CancellationToken ct);
+    Task<VoyagerAgentCredentials> SendEnrollRequestAsync(
+        EnrollmentCredentials enrollmentCreds,
+        CancellationToken ct
+    );
 
     Task<AgentCommand?> CheckInAsync(string token, CancellationToken ct);
 

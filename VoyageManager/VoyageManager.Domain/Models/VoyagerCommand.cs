@@ -10,11 +10,13 @@ public class VoyagerCommand
 
     public VoyagerCommandType CommandType { get; set; }
 
-    public VoyagerTargetType TargetType { get; set; }
-
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     public string? CreatedBy { get; set; }
+
+    public string? CronSchedule { get; set; }
+
+    public bool IsScheduled => CronSchedule is not null;
 
     public ICollection<VoyagerCommandAssignment> CommandAssigments { get; set; } = [];
 }

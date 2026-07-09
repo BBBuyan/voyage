@@ -15,13 +15,22 @@ public class AgentCommandService : IAgentCommandService
         _voyageManagerClient = client;
     }
 
-    public async Task<AgentCommand?> GetAssignedCommand(string token, CancellationToken ct)
+    public async Task<AgentCommand?> GetAssignedCommandAsync(string token, CancellationToken ct)
     {
         return await _voyageManagerClient.CheckInAsync(token, ct);
     }
 
-    public async Task SendCommandStatusAsync(string token, AgentCommand command, CancellationToken ct)
+    public async Task SendCommandStatusAsync(
+        string token,
+        AgentCommand command,
+        CancellationToken ct
+    )
     {
         await _voyageManagerClient.SendCommandStatus(token, command, ct);
+    }
+
+    public async Task ExecuteCommandAsync(AgentCommand command)
+    {
+
     }
 }

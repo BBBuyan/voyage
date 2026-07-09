@@ -20,7 +20,7 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
         IAgentTokenProvider agentTokenProvider,
         IAgentCredentialsProvider agentCredentialsProvider,
         IAgentCommandService agentCommandService
-        )
+    )
     {
         _logger = logger;
         _agentCredentialsProvider = agentCredentialsProvider;
@@ -30,17 +30,24 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
 
     public async Task RunAsync(CancellationToken ct)
     {
-        VoyagerAgentCredentials agentCredentials = await _agentCredentialsProvider.GetAgentCredentialsAsync(ct);
+        VoyagerAgentCredentials agentCredentials =
+            await _agentCredentialsProvider.GetAgentCredentialsAsync(ct);
 
         while (!ct.IsCancellationRequested)
         {
             AgentToken agentToken = await _agentTokenProvider.GetTokenAsync(agentCredentials, ct);
-            AgentCommand? assignedCommand = await _agentCommandService.GetAssignedCommand(agentToken.Value, ct);
+            AgentCommand? assignedCommand = await _agentCommandService
+                .GetAssignedCommandAsync(agentToken.Value, ct);
+
             if (assignedCommand != null)
             {
                 try
                 {
-                    _logger.LogInformation("Executing {CommandId}, {CommandType}", assignedCommand.Id, assignedCommand.CommandType.ToString());
+                    _logger.LogInformation(
+                        "Executing {CommandId}, {CommandType}",
+                        assignedCommand.Id,
+                        assignedCommand.CommandType.ToString()
+                    );
                     // Command Logic
                     assignedCommand.Status = AgentCommandStatus.Succeeded;
                 }
@@ -48,7 +55,11 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
                 {
                     _logger.LogError(message: ex.Message);
                 }
-                await _agentCommandService.SendCommandStatusAsync(agentToken.Value, assignedCommand, ct);
+                await _agentCommandService.SendCommandStatusAsync(
+                    agentToken.Value,
+                    assignedCommand,
+                    ct
+                );
             }
 
             await Task.Delay(5000, ct);

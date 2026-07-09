@@ -19,6 +19,7 @@ namespace VoyageManager.Api.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 [Authorize(Policy = "AgentOnly")]
 public class AgentsController : ControllerBase
@@ -36,7 +37,6 @@ public class AgentsController : ControllerBase
     /// <returns></returns>
     [AllowAnonymous]
     [HttpPost("enroll")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Guid>> Enroll([FromBody] EnrollRequest enrollRequest, CancellationToken ct)
     {
@@ -88,7 +88,6 @@ public class AgentsController : ControllerBase
     /// <returns></returns>
     [AllowAnonymous]
     [HttpPost("token")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TokenResult>> Token([FromBody] TokenRequest tokenRequest, CancellationToken ct)
     {
@@ -108,8 +107,10 @@ public class AgentsController : ControllerBase
     /// Report the command results.
     /// </summary>
     /// <returns></returns>
-    [HttpPost("commands/{id}/status")]
-    public async Task<ActionResult<CommandStatusResponse>> UpdateCommandStatus(Guid id, [FromBody] CommandStatusRequest request, CancellationToken ct)
+    [HttpPut("commands/{id}/received")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCommandStatus(Guid id, [FromBody] CommandStatusRequest request, CancellationToken ct)
     {
         string? agentIdString = User.FindFirst("sub")?.Value;
 
@@ -118,11 +119,11 @@ public class AgentsController : ControllerBase
             return BadRequest("Invalid AgentId");
         }
 
-        ErrorOr<CommandStatusResponse> result = await _agentService
+        ErrorOr<bool> result = await _agentService
             .UpdateCommandStatusAsync(agentId, id, request, ct);
 
         return result.MatchFirst<ActionResult>(
-            value => Ok(value),
+            value => Ok(),
             err => err.Type switch
             {
                 ErrorType.NotFound => NotFound(err.Description),

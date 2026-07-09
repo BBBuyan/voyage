@@ -6,6 +6,6 @@ namespace Voyager.Application.Interfaces;
 
 public interface IAgentCommandService
 {
-    Task<AgentCommand?> GetAssignedCommand(string token, CancellationToken ct);
-    Task SendCommandStatusAsync(string token, AgentCommand command, CancellationToken ct);
+    Task<AgentCommand?> GetAssignedCommandAsync(string token, CancellationToken ct = default);
+    Task SendCommandStatusAsync(string token, AgentCommand command, CancellationToken ct = default);
 }

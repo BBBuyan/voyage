@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VoyageManager.Api.DTOs;
 using VoyageManager.Application.DTOs;
 using VoyageManager.Application.Interfaces;
 
@@ -25,30 +25,51 @@ public class AgentManagementController : ControllerBase
         _agentManagementService = service;
     }
 
+    /// <summary>
+    /// Get agents.
+    /// </summary>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     [AllowAnonymous]
-    [HttpGet()]
+    [HttpGet]
     public async Task<ActionResult<List<VoyagerAgentDTO>>> GetVoyagers(CancellationToken ct)
     {
         List<VoyagerAgentDTO> voyagerAgents = await _agentManagementService.GetAgents(ct);
         return Ok(voyagerAgents);
     }
 
+    /// <summary>
+    /// Update agent status.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     [AllowAnonymous]
-    [HttpPost("enable")]
-    public async Task<ActionResult<int>> EnableById(EnableAgentsRequest request, CancellationToken ct)
+    [HttpPost("{id:guid}/status")]
+    public async Task<ActionResult<int>> UpdateStatus(Guid id, CancellationToken ct)
     {
-        int affected = 0;
-        if (request.AgentId is not null)
-        {
-            affected = await _agentManagementService
-                .EnableAgentById(request.AgentId.Value, ct);
-        }
-        else if (request.GroupId is not null)
-        {
-            affected = await _agentManagementService
-                .EnableAgentsByGroupId(request.GroupId.Value, ct);
-        }
+        int affected = await _agentManagementService.EnableAgentById(id, ct);
 
         return Ok(affected);
+    }
+
+    /// <summary>
+    /// Get all command assignments for the specified agent.
+    /// </summary>
+    [AllowAnonymous]
+    [HttpGet("{id:guid}/assignments")]
+    public async Task<ActionResult<VoyagerCommandAssignmentDTO>> GetCommands(Guid id, CancellationToken ct)
+    {
+        return Ok();
+    }
+
+    /// <summary>
+    /// Assign a command to the specified agent.
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPut("{id:guid}/assignments")]
+    public async Task<ActionResult> CreateAssignment(Guid id, CancellationToken ct)
+    {
+        return Ok();
     }
 }

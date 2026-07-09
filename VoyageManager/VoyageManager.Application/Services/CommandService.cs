@@ -12,13 +12,13 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Application.Services;
 
-public class CommandManagementService : ICommandManagementService
+public class CommandService : ICommandService
 {
     private readonly ICommandManagementRepository _commandManagementRepository;
     private readonly IAgentManagementRepository _agentManagementRepository;
     private readonly IMapper _mapper;
 
-    public CommandManagementService(
+    public CommandService(
         ICommandManagementRepository commandManagementRepository,
         IAgentManagementRepository agentManagementRepository,
         IMapper mapper
@@ -47,7 +47,6 @@ public class CommandManagementService : ICommandManagementService
         VoyagerCommand command = new()
         {
             CommandType = type,
-            TargetType = VoyagerTargetType.SingleHost,
             CreatedBy = username,
         };
         command.CommandAssigments.Add(assignment);
@@ -70,7 +69,6 @@ public class CommandManagementService : ICommandManagementService
         VoyagerCommand command = new()
         {
             CommandType = type,
-            TargetType = VoyagerTargetType.GroupHosts,
             CreatedBy = username,
             CommandAssigments = assignments
         };
@@ -93,7 +91,6 @@ public class CommandManagementService : ICommandManagementService
         VoyagerCommand command = new()
         {
             CommandType = type,
-            TargetType = VoyagerTargetType.GroupHosts,
             CreatedBy = username,
             CommandAssigments = assignments
         };

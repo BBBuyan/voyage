@@ -23,4 +23,25 @@ public class GroupManagementController : ControllerBase
     {
         return Ok(new());
     }
+
+    [AllowAnonymous]
+    [HttpGet("{id}/assignments")]
+    public async Task<ActionResult<VoyagerAgentDTO>> EnableGroupAgents(Guid Id)
+    {
+        return Ok(new());
+    }
+
+    [AllowAnonymous]
+    [HttpPost("{id}/assignments")]
+    public async Task<ActionResult<VoyagerAgentDTO>> CreateGroupCommandAssignments(Guid Id)
+    {
+        return Ok(new());
+    }
+
+    [AllowAnonymous]
+    [HttpPost("{id}/status")]
+    public async Task<ActionResult<VoyagerAgentDTO>> UpdateGroupAgentStatus(Guid Id)
+    {
+        return Ok(new());
+    }
 }

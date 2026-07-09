@@ -9,8 +9,6 @@ public class VoyagerCommandDTO
 
     public VoyagerCommandType CommandType { get; set; }
 
-    public VoyagerTargetType TargetType { get; set; }
-
     public DateTimeOffset CreatedAt { get; set; }
 
     public string? CreatedBy { get; set; }

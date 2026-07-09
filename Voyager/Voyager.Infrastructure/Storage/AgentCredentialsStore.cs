@@ -13,12 +13,15 @@ public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
     private readonly string _agentCredentialsFilePath;
     private readonly JsonSerializerOptions _agentJsonSerializerOptions = new()
     {
-        WriteIndented = true
+        WriteIndented = true,
     };
 
     public AgentCredentialsStore()
     {
-        _agentCredentialsFilePath = Path.Combine(_commonApplicationPath, AgentFileNames.AgentCredentialsFileName);
+        _agentCredentialsFilePath = Path.Combine(
+            _commonApplicationPath,
+            AgentFileNames.AgentCredentialsFileName
+        );
     }
 
     public async Task<VoyagerAgentCredentials?> ReadAgentCredentialsAsync(CancellationToken ct)
@@ -29,7 +32,9 @@ public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
                 return null;
 
             string json = await File.ReadAllTextAsync(_agentCredentialsFilePath, ct);
-            VoyagerAgentCredentials? creds = JsonSerializer.Deserialize<VoyagerAgentCredentials>(json);
+            VoyagerAgentCredentials? creds = JsonSerializer.Deserialize<VoyagerAgentCredentials>(
+                json
+            );
 
             if (creds is null || !creds.IsValid())
                 return null;
@@ -42,7 +47,10 @@ public class AgentCredentialsStore : BaseLocalStore, IAgentCredentialsStore
         }
     }
 
-    public async Task<bool> SaveAgentCredentialsAsync(VoyagerAgentCredentials credentials, CancellationToken ct)
+    public async Task<bool> SaveAgentCredentialsAsync(
+        VoyagerAgentCredentials credentials,
+        CancellationToken ct
+    )
     {
         try
         {

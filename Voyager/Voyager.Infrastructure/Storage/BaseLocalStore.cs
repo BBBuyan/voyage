@@ -12,7 +12,9 @@ public abstract class BaseLocalStore
         if (OperatingSystem.IsWindows())
         {
             string appFolderName = "Voyager";
-            string commonAppPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string commonAppPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.CommonApplicationData
+            );
             _commonApplicationPath = Path.Combine(commonAppPath, appFolderName);
         }
         else if (OperatingSystem.IsLinux())
