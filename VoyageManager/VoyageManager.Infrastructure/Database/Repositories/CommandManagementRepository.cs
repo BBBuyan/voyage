@@ -24,9 +24,9 @@ public class CommandManagementRepository : ICommandManagementRepository
         return await _dbContext.SaveChangesAsync(ct);
     }
 
-    public Task<List<VoyagerCommandAssignment>> GetVoyagerCommandAssignmentsByCommandIdAsync(Guid commandId, CancellationToken ct)
+    public Task<List<CommandAssignment>> GetVoyagerCommandAssignmentsByCommandIdAsync(Guid commandId, CancellationToken ct)
     {
-        return _dbContext.VoyagerCommandAssignments.Where(x => x.VoyagerCommandId == commandId).ToListAsync(ct);
+        return _dbContext.CommandAssignments.Where(x => x.VoyagerCommandId == commandId).ToListAsync(ct);
     }
 
     public Task<VoyagerCommand?> GetVoyagerCommandByIdAsync(Guid id, CancellationToken ct)

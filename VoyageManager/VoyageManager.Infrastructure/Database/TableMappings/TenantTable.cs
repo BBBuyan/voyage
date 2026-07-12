@@ -9,13 +9,13 @@ public class TenantTable : IEntityTypeConfiguration<Tenant>
     public void Configure(EntityTypeBuilder<Tenant> builder)
     {
         builder
-            .HasMany(x => x.VoyagerGroups)
+            .HasMany(x => x.Groups)
             .WithOne(x => x.Tenant)
             .HasForeignKey(x => x.TenantId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasMany(x => x.VoyagerAgents)
+            .HasMany(x => x.Workers)
             .WithOne(x => x.Tenant)
             .HasForeignKey(x => x.TenantId)
             .OnDelete(DeleteBehavior.Cascade);

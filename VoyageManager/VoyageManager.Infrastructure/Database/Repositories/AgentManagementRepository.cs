@@ -18,19 +18,19 @@ public class AgentManagementRepository : IAgentManagementRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<VoyagerAgent>> GetVoyagerAgents(CancellationToken ct)
+    public async Task<List<Worker>> GetVoyagerAgents(CancellationToken ct)
     {
-        return await _dbContext.VoyagerAgents.ToListAsync(ct);
+        return await _dbContext.Workers.ToListAsync(ct);
     }
 
     public Task<bool> AgentExistsAsync(Guid agentId, CancellationToken ct)
     {
-        return _dbContext.VoyagerAgents.AnyAsync(x => x.Id == agentId, ct);
+        return _dbContext.Workers.AnyAsync(x => x.Id == agentId, ct);
     }
 
     public Task<List<Guid>> GetVoyagerAgentIdsByTenantId(Guid tenantId, CancellationToken ct)
     {
-        return _dbContext.VoyagerAgents
+        return _dbContext.Workers
             .Where(x => x.TenantId == tenantId)
             .Select(x => x.Id)
             .ToListAsync(ct);
@@ -38,27 +38,27 @@ public class AgentManagementRepository : IAgentManagementRepository
 
     public Task<List<Guid>> GetVoyagerAgentIdsByGroupId(Guid groupId, CancellationToken ct)
     {
-        return _dbContext.VoyagerGroupAssignments
-            .Where(x => x.VoyagerGroupId == groupId)
-            .Select(x => x.VoyagerAgentId)
+        return _dbContext.GroupAssignments
+            .Where(x => x.GroupId == groupId)
+            .Select(x => x.WorkerId)
             .ToListAsync(ct);
     }
 
     public async Task<int> EnableAgentById(Guid agentId, CancellationToken ct)
     {
-        return await _dbContext.VoyagerAgents
+        return await _dbContext.Workers
             .Where(x => x.Id == agentId)
             .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.IsEnabled, true), ct);
     }
 
     public async Task<int> EnableAgentsByGroupId(Guid groupId, CancellationToken ct)
     {
-        List<Guid> agentIds = await _dbContext.VoyagerGroupAssignments
-            .Where(x => x.VoyagerGroupId == groupId)
-            .Select(x => x.VoyagerAgentId)
+        List<Guid> agentIds = await _dbContext.GroupAssignments
+            .Where(x => x.GroupId == groupId)
+            .Select(x => x.WorkerId)
             .ToListAsync(ct);
 
-        return await _dbContext.VoyagerAgents
+        return await _dbContext.Workers
             .Where(x => agentIds.Contains(x.Id))
             .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.IsEnabled, true), ct);
     }

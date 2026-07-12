@@ -1,6 +1,6 @@
 namespace VoyageManager.Application.Abstractions;
 
-public interface IVoyagePasswordHasher
+public interface IWorkerPasswordHasher
 {
     string HashPassword(string password);
 

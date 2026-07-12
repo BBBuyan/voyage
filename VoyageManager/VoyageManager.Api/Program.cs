@@ -32,8 +32,8 @@ public partial class Program
 
         builder.Services
             .AddAuthorizationBuilder()
-            .AddPolicy("AgentOnly", policy =>
-                policy.RequireRole("agent"));
+            .AddPolicy("WorkerOnly", policy =>
+                policy.RequireRole("worker"));
 
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

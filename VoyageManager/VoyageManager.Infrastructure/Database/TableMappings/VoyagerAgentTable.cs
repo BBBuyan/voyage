@@ -4,9 +4,9 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Infrastructure.Database.TableMappings;
 
-public class VoyagerAgentTable : IEntityTypeConfiguration<VoyagerAgent>
+public class VoyagerAgentTable : IEntityTypeConfiguration<Worker>
 {
-    public void Configure(EntityTypeBuilder<VoyagerAgent> builder)
+    public void Configure(EntityTypeBuilder<Worker> builder)
     {
         builder
             .Property(x => x.Name)
@@ -18,14 +18,14 @@ public class VoyagerAgentTable : IEntityTypeConfiguration<VoyagerAgent>
 
         builder
             .HasMany(x => x.GroupAssignments)
-            .WithOne(x => x.VoyagerAgent)
-            .HasForeignKey(x => x.VoyagerAgentId)
+            .WithOne(x => x.AssignedWorker)
+            .HasForeignKey(x => x.WorkerId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasMany(x => x.CommandAssignments)
-            .WithOne(x => x.VoyagerAgent)
-            .HasForeignKey(x => x.VoyagerAgentId)
+            .WithOne(x => x.AssignedWorker)
+            .HasForeignKey(x => x.WorkerId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

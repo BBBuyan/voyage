@@ -7,13 +7,13 @@ using VoyageManager.Application.Abstractions;
 
 namespace VoyageManager.Infrastructure.Identity;
 
-public class AgentTokenProvider : IVoyageTokenProvider
+public class WorkerTokenProvider : IWorkerTokenProvider
 {
     private readonly JwtOptions _jwtOptions;
     private readonly SymmetricSecurityKey _key;
     private readonly SigningCredentials _signingCredentials;
 
-    public AgentTokenProvider(IOptions<JwtOptions> jwtOptions)
+    public WorkerTokenProvider(IOptions<JwtOptions> jwtOptions)
     {
         _jwtOptions = jwtOptions.Value;
         _key = new(Convert.FromBase64String(jwtOptions.Value.Key));
@@ -25,7 +25,7 @@ public class AgentTokenProvider : IVoyageTokenProvider
         Dictionary<string, object> claims = new()
         {
             ["sub"] = voyagerHostId,
-            ["role"] = "agent"
+            ["role"] = "worker"
         };
 
         SecurityTokenDescriptor descriptor = new()

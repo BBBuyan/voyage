@@ -6,13 +6,13 @@ using VoyageManager.Conventions.Agents;
 
 namespace VoyageManager.Application.Agents;
 
-public interface IAgentService
+public interface IWorkerService
 {
-    Task<ErrorOr<CheckInResponse>> CheckInAsync(Guid agentId, CancellationToken ct);
-
     Task<ErrorOr<Guid>> EnrollAsync(EnrollRequest request, CancellationToken ct);
 
     Task<ErrorOr<TokenResult>> GetTokenAsync(TokenRequest request, CancellationToken ct);
+
+    Task<ErrorOr<CheckInResponse>> CheckInAsync(Guid workerId, CancellationToken ct);
 
     /// <summary>
     /// Handles the command status report that agent has sent.
@@ -24,7 +24,7 @@ public interface IAgentService
     /// <description><see cref="ErrorType.NotFound"/>: if command not found.</description>
     /// </item>
     /// <item>
-    /// <description><see cref="ErrorType.Forbidden"/>: if the transition is invalid.</description>
+    /// <description><see cref="ErrorType.Conflict"/>: if the transition is invalid.</description>
     /// </item>
     /// </list>
     /// </remarks>

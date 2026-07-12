@@ -4,12 +4,12 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Infrastructure.Database.TableMappings;
 
-public class VoyagerGroupAssignmentTable : IEntityTypeConfiguration<VoyagerGroupAssignment>
+public class VoyagerGroupAssignmentTable : IEntityTypeConfiguration<GroupAssignment>
 {
-    public void Configure(EntityTypeBuilder<VoyagerGroupAssignment> builder)
+    public void Configure(EntityTypeBuilder<GroupAssignment> builder)
     {
         builder
-            .HasIndex(x => new { x.VoyagerGroupId, x.VoyagerAgentId })
+            .HasIndex(x => new { x.GroupId, x.WorkerId })
             .IsUnique();
     }
 }

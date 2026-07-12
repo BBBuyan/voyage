@@ -6,19 +6,22 @@ using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VoyageManager.Api.Controllers.Base;
 using VoyageManager.Application.DTOs;
 using VoyageManager.Application.Interfaces;
 
 namespace VoyageManager.Api.Controllers;
 
-[ApiController]
-[Route("api/v1/commands")]
+[Route("api/v1/assignments")]
+[Consumes("application/json")]
+[Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class CommandsController : ControllerBase
+public class AssignmentController : BaseController
 {
     private readonly ICommandService _commandService;
 
-    public CommandsController(ICommandService commandManagementService)
+    public AssignmentController(ICommandService commandManagementService)
     {
         _commandService = commandManagementService;
     }

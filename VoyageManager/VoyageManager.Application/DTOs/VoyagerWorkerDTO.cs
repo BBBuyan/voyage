@@ -2,7 +2,7 @@ using System;
 
 namespace VoyageManager.Application.DTOs;
 
-public class VoyagerAgentDTO
+public class VoyagerWorkerDTO
 {
     public Guid Id { get; set; }
 

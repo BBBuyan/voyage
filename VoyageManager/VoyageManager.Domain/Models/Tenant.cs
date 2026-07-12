@@ -22,7 +22,7 @@ public class Tenant
 
     public required string EnrollmentSecret { get; set; }
 
-    public ICollection<VoyagerAgent> VoyagerAgents { get; set; } = [];
+    public ICollection<Worker> Workers { get; set; } = [];
 
-    public ICollection<VoyagerGroup> VoyagerGroups { get; set; } = [];
+    public ICollection<Group> Groups { get; set; } = [];
 }

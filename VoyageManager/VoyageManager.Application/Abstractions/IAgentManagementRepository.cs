@@ -10,7 +10,7 @@ public interface IAgentManagementRepository
 {
     Task<bool> AgentExistsAsync(Guid agentId, CancellationToken ct);
 
-    Task<List<VoyagerAgent>> GetVoyagerAgents(CancellationToken ct);
+    Task<List<Worker>> GetVoyagerAgents(CancellationToken ct);
 
     Task<List<Guid>> GetVoyagerAgentIdsByTenantId(Guid tenantId, CancellationToken ct);
 

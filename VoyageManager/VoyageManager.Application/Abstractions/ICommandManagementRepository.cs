@@ -8,8 +8,5 @@ namespace VoyageManager.Application.Abstractions;
 
 public interface ICommandManagementRepository
 {
-    Task<int> CreateCommandAsync(VoyagerCommand command, CancellationToken ct);
-    Task<VoyagerCommand?> GetVoyagerCommandByIdAsync(Guid id, CancellationToken ct);
-    Task<List<VoyagerCommand>> GetVoyagerCommandsAsync(CancellationToken ct);
-    Task<List<VoyagerCommandAssignment>> GetVoyagerCommandAssignmentsByCommandIdAsync(Guid commandId, CancellationToken ct);
+    Task<List<CommandAssignment>> GetVoyagerCommandAssignmentsByCommandIdAsync(Guid commandId, CancellationToken ct);
 }

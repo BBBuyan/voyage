@@ -1,6 +1,6 @@
 namespace VoyageManager.Domain.Enums;
 
-public enum VoyagerCommandType
+public enum CommandType
 {
     InventoryScan,
     DiscoveryScan,

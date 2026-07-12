@@ -23,12 +23,12 @@ public static class InfrastructureDI
             opts.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
-        services.AddScoped<IAgentRespository, AgentRepository>();
+        services.AddScoped<IWorkerRespository, AgentRepository>();
         services.AddScoped<IAgentManagementRepository, AgentManagementRepository>();
         services.AddScoped<ICommandManagementRepository, CommandManagementRepository>();
         services.AddScoped<ITenantRepository, TenantRepository>();
-        services.AddScoped<IVoyagePasswordHasher, VoyagePasswordHasher>();
-        services.AddScoped<IVoyageTokenProvider, AgentTokenProvider>();
+        services.AddScoped<IWorkerPasswordHasher, VoyagePasswordHasher>();
+        services.AddScoped<IWorkerTokenProvider, WorkerTokenProvider>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

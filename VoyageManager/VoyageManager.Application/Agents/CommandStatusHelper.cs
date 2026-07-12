@@ -7,25 +7,25 @@ namespace VoyageManager.Application.Agents;
 
 public static class CommandStatusHelper
 {
-    private static readonly Dictionary<VoyagerCommandStatus, VoyagerCommandStatus[]> AllowedTransitions = new()
+    private static readonly Dictionary<AssignmentStatus, AssignmentStatus[]> AllowedTransitions = new()
     {
-        [VoyagerCommandStatus.Pending] = [VoyagerCommandStatus.InProgress],
+        [AssignmentStatus.Pending] = [AssignmentStatus.InProgress],
 
-        [VoyagerCommandStatus.InProgress] =
+        [AssignmentStatus.InProgress] =
         [
-            VoyagerCommandStatus.Succeeded,
-            VoyagerCommandStatus.Failed,
-            VoyagerCommandStatus.Cancelled
+            AssignmentStatus.Done,
+            AssignmentStatus.Failed,
+            AssignmentStatus.Cancelled
         ],
 
-        [VoyagerCommandStatus.Succeeded] = [],
-        [VoyagerCommandStatus.Failed] = [],
-        [VoyagerCommandStatus.Cancelled] = [],
+        [AssignmentStatus.Done] = [],
+        [AssignmentStatus.Failed] = [],
+        [AssignmentStatus.Cancelled] = [],
     };
 
-    public static bool CanTransition(VoyagerCommandStatus currentStatus, VoyagerCommandStatus newStatus)
+    public static bool CanTransition(AssignmentStatus currentStatus, AssignmentStatus newStatus)
     {
-        if (AllowedTransitions.TryGetValue(currentStatus, out VoyagerCommandStatus[]? transitions))
+        if (AllowedTransitions.TryGetValue(currentStatus, out AssignmentStatus[]? transitions))
         {
             return transitions.Contains(newStatus);
         }
@@ -35,20 +35,20 @@ public static class CommandStatusHelper
         }
     }
 
-    public static VoyagerCommandStatus MapStatus(ConventionCommandStatus status)
+    public static AssignmentStatus MapStatus(ConventionCommandStatus status)
     {
         return status switch
         {
-            ConventionCommandStatus.Succeeded => VoyagerCommandStatus.Succeeded,
-            ConventionCommandStatus.Failed => VoyagerCommandStatus.Failed,
-            ConventionCommandStatus.InProgress => VoyagerCommandStatus.InProgress,
-            ConventionCommandStatus.Cancelled => VoyagerCommandStatus.Cancelled,
+            ConventionCommandStatus.Succeeded => AssignmentStatus.Done,
+            ConventionCommandStatus.Failed => AssignmentStatus.Failed,
+            ConventionCommandStatus.InProgress => AssignmentStatus.InProgress,
+            ConventionCommandStatus.Cancelled => AssignmentStatus.Cancelled,
 
             _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
         };
     }
 
-    public static string TransitionErrorDescription(VoyagerCommandStatus currentStatus, VoyagerCommandStatus newStatus)
+    public static string TransitionErrorDescription(AssignmentStatus currentStatus, AssignmentStatus newStatus)
     {
         return $"Invalid transition from {currentStatus} to {newStatus}";
     }

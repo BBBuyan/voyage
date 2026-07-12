@@ -10,8 +10,8 @@ public static class ApplicationDI
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IAgentService, AgentService>();
-        services.AddScoped<IAgentManagementService, AgentManagementService>();
+        services.AddScoped<IWorkerService, WorkerService>();
+        services.AddScoped<IWorkerManagementService, WorkerManagementService>();
         services.AddScoped<ICommandService, CommandService>();
         services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
 

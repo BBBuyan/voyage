@@ -2,7 +2,7 @@ using System;
 
 namespace VoyageManager.Application.Abstractions;
 
-public interface IVoyageTokenProvider
+public interface IWorkerTokenProvider
 {
     string GenerateJwtToken(Guid voyagerHostId, int expirationInSeconds);
 }

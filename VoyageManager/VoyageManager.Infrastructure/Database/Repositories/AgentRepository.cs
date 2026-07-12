@@ -9,7 +9,7 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Infrastructure.Database.Repositories;
 
-public class AgentRepository : IAgentRespository
+public class AgentRepository : IWorkerRespository
 {
     private readonly VoyageManagerDbContext _dbContext;
 
@@ -18,46 +18,53 @@ public class AgentRepository : IAgentRespository
         _dbContext = dbContext;
     }
 
-    public async Task<VoyagerCommandAssignment?> GetCommandAssignmentAsync(Guid agentId, Guid commandId, CancellationToken ct)
+    public async Task<CommandAssignment?> GetAssignmentAsync(Guid agentId, Guid assignmentId, CancellationToken ct)
     {
-        return await _dbContext.VoyagerCommandAssignments
-            .FirstOrDefaultAsync(x => x.VoyagerAgentId == agentId && x.VoyagerCommandId == commandId, ct);
+        return await _dbContext.CommandAssignments
+            .FirstOrDefaultAsync(x => x.WorkerId == agentId && x.Id == assignmentId, ct);
     }
 
-    public async Task<VoyagerCommand?> GetPendingCommandAsync(Guid agentId, CancellationToken ct)
+    public async Task<CommandAssignment?> GetNextPendingAssignmentAsync(Guid agentId, CancellationToken ct)
     {
-        return await _dbContext.VoyagerCommandAssignments
+        return await _dbContext.CommandAssignments
             .Where(x =>
-                x.VoyagerAgentId == agentId &&
-                x.Status == VoyagerCommandStatus.Pending)
+                x.WorkerId == agentId &&
+                x.Status == AssignmentStatus.Pending)
             .OrderBy(x => x.CreatedAt)
-            .Select(x => x.VoyagerCommand)
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<VoyagerAgent?> GetAgentAsync(Guid id, CancellationToken ct)
+    public async Task<Worker?> GetWorkerAsync(Guid id, CancellationToken ct)
     {
         return await _dbContext
-            .VoyagerAgents
+            .Workers
             .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
-    public async Task<Guid> RegisterAgentAsync(
+    public async Task<Guid> RegisterWorkerAsync(
         string name,
         string hardwareId,
         string passwordHash,
         Guid tenantId,
         CancellationToken ct)
     {
-        VoyagerAgent newVoyagerHost = new()
+        Worker newWorker = new()
         {
             Name = name,
             PasswordHash = passwordHash,
             HardwareId = hardwareId,
             TenantId = tenantId,
         };
-        _dbContext.VoyagerAgents.Add(newVoyagerHost);
+        _dbContext.Workers.Add(newWorker);
         await _dbContext.SaveChangesAsync(ct);
-        return newVoyagerHost.Id;
+        return newWorker.Id;
+    }
+
+    public async Task<Tenant?> GetTenantById(Guid tenantId, CancellationToken ct)
+    {
+        Tenant? tenant = await _dbContext.Tenants
+            .Where(x => x.Id == tenantId)
+            .FirstOrDefaultAsync(ct);
+        return tenant;
     }
 }

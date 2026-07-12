@@ -3,7 +3,7 @@ using VoyageManager.Application.Abstractions;
 
 namespace VoyageManager.Infrastructure.Identity;
 
-public class VoyagePasswordHasher : IVoyagePasswordHasher
+public class VoyagePasswordHasher : IWorkerPasswordHasher
 {
     private readonly PasswordHasher<object> _hasher = new();
 

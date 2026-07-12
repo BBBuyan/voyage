@@ -43,17 +43,12 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
             {
                 try
                 {
-                    _logger.LogInformation(
-                        "Executing {CommandId}, {CommandType}",
-                        assignedCommand.Id,
-                        assignedCommand.CommandType.ToString()
-                    );
-                    // Command Logic
                     assignedCommand.Status = AgentCommandStatus.Succeeded;
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(message: ex.Message);
+                    assignedCommand.Status = AgentCommandStatus.Failed;
                 }
                 await _agentCommandService.SendCommandStatusAsync(
                     agentToken.Value,

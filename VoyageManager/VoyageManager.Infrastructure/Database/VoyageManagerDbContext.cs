@@ -7,17 +7,15 @@ public class VoyageManagerDbContext : DbContext
 {
     public DbSet<Tenant> Tenants { get; set; }
 
-    public DbSet<VoyagerAgent> VoyagerAgents { get; set; }
+    public DbSet<Worker> Workers { get; set; }
 
-    public DbSet<VoyagerGroup> VoyagerGroups { get; set; }
+    public DbSet<Group> Groups { get; set; }
 
-    public DbSet<VoyagerCommand> VoyagerCommands { get; set; }
+    public DbSet<GroupAssignment> GroupAssignments { get; set; }
 
-    public DbSet<VoyagerGroupAssignment> VoyagerGroupAssignments { get; set; }
+    public DbSet<CommandAssignment> CommandAssignments { get; set; }
 
-    public DbSet<VoyagerCommandAssignment> VoyagerCommandAssignments { get; set; }
-
-    public VoyageManagerDbContext(DbContextOptions options) : base(options)
+    public VoyageManagerDbContext(DbContextOptions<VoyageManagerDbContext> options) : base(options)
     {
 
     }

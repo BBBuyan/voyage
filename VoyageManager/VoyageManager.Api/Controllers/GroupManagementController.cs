@@ -1,14 +1,21 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using VoyageManager.Api.Controllers.Base;
 using VoyageManager.Application.DTOs;
 
 namespace VoyageManager.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/groups")]
-public class GroupManagementController : ControllerBase
+[Consumes("application/json")]
+[Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+public class GroupManagementController : BaseController
 {
     [AllowAnonymous]
     [HttpGet]
@@ -18,30 +25,38 @@ public class GroupManagementController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpPost]
+    public async Task<ActionResult<VoyagerWorkerDTO>> CreateGroup(CancellationToken ct)
+    {
+        return Ok(new());
+    }
+
+    [AllowAnonymous]
+    [HttpDelete]
+    public async Task<ActionResult<VoyagerWorkerDTO>> DeleteGroup(Guid id, CancellationToken ct)
+    {
+        return Ok(new());
+    }
+
+    [AllowAnonymous]
     [HttpGet("{id}/members")]
-    public async Task<ActionResult<VoyagerAgentDTO>> GetGroupMembers(Guid Id)
+    public async Task<ActionResult<VoyagerWorkerDTO>> GetGroupMembers(Guid id, CancellationToken ct)
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
-    [HttpGet("{id}/assignments")]
-    public async Task<ActionResult<VoyagerAgentDTO>> EnableGroupAgents(Guid Id)
+    [HttpDelete("{groupId:guid}/members/{memberId:guid}")]
+    public async Task<ActionResult<VoyagerWorkerDTO>> AddGroupMember(Guid groupId, Guid memberId, CancellationToken ct)
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
-    [HttpPost("{id}/assignments")]
-    public async Task<ActionResult<VoyagerAgentDTO>> CreateGroupCommandAssignments(Guid Id)
+    [HttpPut("{groupId:guid}/members/{memberId:guid}")]
+    public async Task<ActionResult<VoyagerWorkerDTO>> DeleteGroupMember(Guid groupId, Guid memberId, CancellationToken ct)
     {
         return Ok(new());
     }
 
-    [AllowAnonymous]
-    [HttpPost("{id}/status")]
-    public async Task<ActionResult<VoyagerAgentDTO>> UpdateGroupAgentStatus(Guid Id)
-    {
-        return Ok(new());
-    }
 }

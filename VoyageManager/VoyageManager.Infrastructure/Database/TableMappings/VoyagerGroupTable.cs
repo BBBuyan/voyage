@@ -4,14 +4,14 @@ using VoyageManager.Domain.Models;
 
 namespace VoyageManager.Infrastructure.Database.TableMappings;
 
-public class VoyagerGroupTable : IEntityTypeConfiguration<VoyagerGroup>
+public class VoyagerGroupTable : IEntityTypeConfiguration<Group>
 {
-    public void Configure(EntityTypeBuilder<VoyagerGroup> builder)
+    public void Configure(EntityTypeBuilder<Group> builder)
     {
         builder
             .HasMany(x => x.GroupAssignments)
-            .WithOne(x => x.VoyagerGroup)
-            .HasForeignKey(x => x.VoyagerGroupId)
+            .WithOne(x => x.AssignedGroup)
+            .HasForeignKey(x => x.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder

@@ -11,11 +11,13 @@ public class VoyagerCommandAssignmentDTO
 
     public Guid VoyagerCommandId { get; set; }
 
-    public VoyagerCommandStatus Status { get; set; }
+    public AssignmentStatus Status { get; set; }
 
     public DateTimeOffset StartedAt { get; set; }
 
     public DateTimeOffset FinishedAt { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
+
+    public string? CreatedBy { get; set; }
 }

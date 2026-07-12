@@ -1,10 +1,10 @@
-using VoyageManager.Conventions.Enums;
-
 namespace VoyageManager.Conventions.Agents;
 
 public class CheckInResponse
 {
-    public Guid Id { get; set; }
+    public bool Shutdown { get; set; }
 
-    public ConventionCommandType CommandType { get; set; }
+    public bool CancelCurrentAssignment { get; set; }
+
+    public ConventionCommandAssignment? CommandAssignment { get; set; }
 }
