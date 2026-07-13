@@ -8,7 +8,7 @@ namespace VoyageManager.Application.Interfaces;
 
 public interface IWorkerManagementService
 {
-    Task<List<VoyagerWorkerDTO>> GetAgentsAsync(CancellationToken ct);
+    Task<List<WorkerDTO>> GetAgentsAsync(CancellationToken ct);
 
     Task<int> EnableAgentAsync(Guid agentId, CancellationToken ct);
 }

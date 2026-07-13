@@ -18,58 +18,41 @@ namespace VoyageManager.Api.Controllers;
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class WorkerManagementController : BaseController
 {
-    private readonly IWorkerManagementService _agentManagementService;
+    private readonly IWorkerManagementService _workerManagementService;
 
     public WorkerManagementController(IWorkerManagementService service)
     {
-        _agentManagementService = service;
+        _workerManagementService = service;
     }
 
     /// <summary>
     /// Get agents.
     /// </summary>
-    /// <param name="ct"></param>
-    /// <returns></returns>
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<List<VoyagerWorkerDTO>>> GetVoyagers(CancellationToken ct)
+    public async Task<ActionResult<List<WorkerDTO>>> GetWorkers(CancellationToken ct)
     {
-        List<VoyagerWorkerDTO> voyagerAgents = await _agentManagementService.GetAgentsAsync(ct);
+        List<WorkerDTO> voyagerAgents = await _workerManagementService.GetAgentsAsync(ct);
         return Ok(voyagerAgents);
     }
 
     /// <summary>
-    /// Update agent status.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="ct"></param>
-    /// <returns></returns>
-    [AllowAnonymous]
-    [HttpPost("{id:guid}/status")]
-    public async Task<ActionResult<int>> UpdateStatus(Guid id, CancellationToken ct)
-    {
-        int affected = await _agentManagementService.EnableAgentAsync(id, ct);
-
-        return Ok(affected);
-    }
-
-    /// <summary>
-    /// Get all command assignments for the specified agent.
+    /// Update worker state: Enabled or Disabled
     /// </summary>
     [AllowAnonymous]
-    [HttpGet("{id:guid}/assignments")]
-    public async Task<ActionResult<VoyagerCommandAssignmentDTO>> GetCommands(Guid id, CancellationToken ct)
+    [HttpPut("status")]
+    public async Task<ActionResult<int>> UpdateStatus(
+        Guid? workerId,
+        Guid? groupId,
+        CancellationToken ct
+    )
     {
-        return Ok();
-    }
+        if (workerId.HasValue)
+        {
+            int affected = await _workerManagementService.EnableAgentAsync(workerId.Value, ct);
+            return Ok(affected);
+        }
 
-    /// <summary>
-    /// Create command assignment.
-    /// </summary>
-    [AllowAnonymous]
-    [HttpPost("{id:guid}/assignments")]
-    public async Task<ActionResult> CreateAssignment(Guid id, CancellationToken ct)
-    {
         return Ok();
     }
 }

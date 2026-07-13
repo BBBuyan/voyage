@@ -13,43 +13,48 @@ namespace VoyageManager.Application.Services;
 
 public class WorkerManagementService : IWorkerManagementService
 {
-    private readonly IAgentManagementRepository _agentManagementRespository;
+    private readonly IWorkerManagementRepository _workerManagementRespository;
     private readonly IMapper _mapper;
 
     public WorkerManagementService(
-        IAgentManagementRepository agentManagementRespository,
+        IWorkerManagementRepository agentManagementRespository,
         IMapper mapper
-        )
+    )
     {
         _mapper = mapper;
-        _agentManagementRespository = agentManagementRespository;
+        _workerManagementRespository = agentManagementRespository;
     }
 
     public async Task<ErrorOr<Guid>> CreateAssignmentAsync(
         Guid agentId,
-        CommandType type,
+        WorkerCommandType type,
         string? username,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         throw new NotImplementedException();
     }
 
-    public async Task<List<VoyagerWorkerDTO>> GetAgentsAsync(CancellationToken ct)
+    public async Task<List<WorkerDTO>> GetAgentsAsync(CancellationToken ct)
     {
-        return _mapper.Map<List<VoyagerWorkerDTO>>(await _agentManagementRespository.GetVoyagerAgents(ct));
+        return _mapper.Map<List<WorkerDTO>>(await _workerManagementRespository.GetAsync(ct));
     }
 
     public async Task<int> EnableAgentAsync(Guid agentId, CancellationToken ct)
     {
-        return await _agentManagementRespository.EnableAgentById(agentId, ct);
+        return await _workerManagementRespository.EnableAgentById(agentId, ct);
     }
 
     public async Task<int> DisableAgentAsync(Guid agentId, CancellationToken ct)
     {
-        return await _agentManagementRespository.EnableAgentById(agentId, ct);
+        return await _workerManagementRespository.EnableAgentById(agentId, ct);
     }
 
-    public async Task<ErrorOr<Success>> CancelAssignmentExecutionAsync(Guid agentId, Guid assignmentId, CancellationToken ct)
+    public async Task<ErrorOr<Success>> CancelAssignmentExecutionAsync(
+        Guid agentId,
+        Guid assignmentId,
+        CancellationToken ct
+    )
     {
         throw new NotImplementedException();
     }

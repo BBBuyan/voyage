@@ -16,16 +16,19 @@ public static class InfrastructureDI
     /// <param name="services"></param>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        services.AddDbContext<VoyageManagerDbContext>(opts =>
+        services.AddDbContext<ApplicationDbContext>(opts =>
         {
             opts.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
-        services.AddScoped<IWorkerRespository, AgentRepository>();
-        services.AddScoped<IAgentManagementRepository, AgentManagementRepository>();
-        services.AddScoped<ICommandManagementRepository, CommandManagementRepository>();
+        services.AddScoped<IWorkerRespository, WorkerRepository>();
+        services.AddScoped<IWorkerManagementRepository, WorkerManagementRepository>();
+        services.AddScoped<IAssignmentRepository, AssignmentRepository>();
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<IWorkerPasswordHasher, VoyagePasswordHasher>();
         services.AddScoped<IWorkerTokenProvider, WorkerTokenProvider>();

@@ -36,8 +36,10 @@ public class VoyagerAgentRuntime : IVoyagerAgentRuntime
         while (!ct.IsCancellationRequested)
         {
             AgentToken agentToken = await _agentTokenProvider.GetTokenAsync(agentCredentials, ct);
-            AgentCommand? assignedCommand = await _agentCommandService
-                .GetAssignedCommandAsync(agentToken.Value, ct);
+            AgentCommand? assignedCommand = await _agentCommandService.GetAssignedCommandAsync(
+                agentToken.Value,
+                ct
+            );
 
             if (assignedCommand != null)
             {

@@ -1,5 +1,3 @@
 namespace Voyager.Domain.Models;
 
-internal class DiscoveryScanCommand
-{
-}
+internal class DiscoveryScanCommand { }

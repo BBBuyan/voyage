@@ -6,9 +6,9 @@ namespace VoyageManager.Infrastructure.Database.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly VoyageManagerDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public UnitOfWork(VoyageManagerDbContext dbContext)
+    public UnitOfWork(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }

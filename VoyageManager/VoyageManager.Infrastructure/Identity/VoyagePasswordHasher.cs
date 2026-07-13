@@ -14,8 +14,11 @@ public class VoyagePasswordHasher : IWorkerPasswordHasher
 
     public bool VerifyPassword(string hashedPassword, string password)
     {
-        PasswordVerificationResult result = _hasher
-            .VerifyHashedPassword(null!, hashedPassword, password);
+        PasswordVerificationResult result = _hasher.VerifyHashedPassword(
+            null!,
+            hashedPassword,
+            password
+        );
 
         return result == PasswordVerificationResult.Success;
     }

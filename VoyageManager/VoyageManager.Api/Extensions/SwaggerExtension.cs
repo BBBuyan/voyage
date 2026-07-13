@@ -17,12 +17,20 @@ public static class SwaggerExtension
             string xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             opts.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
-            opts.AddSecurityDefinition(VoyagerBearerSecurityDefinition.Name, VoyagerBearerSecurityDefinition.Scheme);
+            opts.AddSecurityDefinition(
+                VoyagerBearerSecurityDefinition.Name,
+                VoyagerBearerSecurityDefinition.Scheme
+            );
             opts.AddSecurityRequirement(doc =>
             {
                 return new OpenApiSecurityRequirement()
                 {
-                    [new OpenApiSecuritySchemeReference(VoyagerBearerSecurityDefinition.Name, doc)] = []
+                    [
+                        new OpenApiSecuritySchemeReference(
+                            VoyagerBearerSecurityDefinition.Name,
+                            doc
+                        )
+                    ] = [],
                 };
             });
             opts.OperationFilter<AuthorizeOperationFilter>();

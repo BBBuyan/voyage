@@ -22,11 +22,7 @@ public class WorkerTokenProvider : IWorkerTokenProvider
 
     public string GenerateJwtToken(Guid voyagerHostId, int expirationInSeconds)
     {
-        Dictionary<string, object> claims = new()
-        {
-            ["sub"] = voyagerHostId,
-            ["role"] = "worker"
-        };
+        Dictionary<string, object> claims = new() { ["sub"] = voyagerHostId, ["role"] = "worker" };
 
         SecurityTokenDescriptor descriptor = new()
         {
@@ -42,4 +38,3 @@ public class WorkerTokenProvider : IWorkerTokenProvider
         return handler.CreateToken(descriptor);
     }
 }
-

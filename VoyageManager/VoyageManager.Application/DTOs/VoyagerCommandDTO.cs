@@ -7,7 +7,7 @@ public class VoyagerCommandDTO
 {
     public Guid Id { get; set; }
 
-    public CommandType CommandType { get; set; }
+    public WorkerCommandType CommandType { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
 

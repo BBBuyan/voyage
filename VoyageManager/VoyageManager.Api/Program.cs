@@ -20,23 +20,22 @@ public partial class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services
-            .AddOptions<JwtOptions>()
+        builder
+            .Services.AddOptions<JwtOptions>()
             .Bind(builder.Configuration.GetSection(JwtOptions.SECTION_NAME))
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        JwtOptions jwtOption = builder.Configuration
-            .GetSection(JwtOptions.SECTION_NAME)
+        JwtOptions jwtOption = builder
+            .Configuration.GetSection(JwtOptions.SECTION_NAME)
             .Get<JwtOptions>()!;
 
-        builder.Services
-            .AddAuthorizationBuilder()
-            .AddPolicy("WorkerOnly", policy =>
-                policy.RequireRole("worker"));
+        builder
+            .Services.AddAuthorizationBuilder()
+            .AddPolicy("WorkerOnly", policy => policy.RequireRole("worker"));
 
-        builder.Services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        builder
+            .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opts =>
             {
                 opts.TokenValidationParameters = new()
@@ -49,16 +48,19 @@ public partial class Program
                     RoleClaimType = "role",
                     ValidIssuer = jwtOption.Issuer,
                     ValidAudience = jwtOption.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(jwtOption.Key))
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Convert.FromBase64String(jwtOption.Key)
+                    ),
                 };
 
                 opts.MapInboundClaims = false;
             });
 
-        builder.Services
-            .AddControllers()
-            .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(
-                    new JsonStringEnumConverter()));
+        builder
+            .Services.AddControllers()
+            .AddJsonOptions(opts =>
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+            );
 
         builder.Services.AddCustomSwagger();
         builder.Services.AddApplication();
@@ -79,8 +81,7 @@ public partial class Program
             app.UseSwaggerUI();
         }
 
-        app.MapControllers()
-            .RequireAuthorization();
+        app.MapControllers().RequireAuthorization();
 
         app.Run();
     }

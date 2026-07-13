@@ -9,7 +9,11 @@ public interface IWorkerRespository
 {
     Task<Worker?> GetWorkerAsync(Guid id, CancellationToken ct);
 
-    Task<CommandAssignment?> GetAssignmentAsync(Guid workerId, Guid assignmentId, CancellationToken ct);
+    Task<CommandAssignment?> GetAssignmentAsync(
+        Guid workerId,
+        Guid assignmentId,
+        CancellationToken ct
+    );
 
     Task<CommandAssignment?> GetNextPendingAssignmentAsync(Guid workerId, CancellationToken ct);
 
@@ -18,7 +22,8 @@ public interface IWorkerRespository
         string hardwareId,
         string passwordHash,
         Guid tenantId,
-        CancellationToken ct);
+        CancellationToken ct
+    );
 
     Task<Tenant?> GetTenantById(Guid tenantId, CancellationToken ct);
 }

@@ -12,7 +12,8 @@ public class AuthorizeOperationFilter : IOperationFilter
         if (context.MethodInfo.DeclaringType == null)
             return;
 
-        bool allowsAnonymous = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+        bool allowsAnonymous = context
+            .MethodInfo.DeclaringType.GetCustomAttributes(true)
             .Union(context.MethodInfo.GetCustomAttributes(true))
             .OfType<AllowAnonymousAttribute>()
             .Any();

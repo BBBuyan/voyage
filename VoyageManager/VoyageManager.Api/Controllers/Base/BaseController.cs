@@ -17,12 +17,9 @@ public abstract class BaseController : ControllerBase
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Conflict => StatusCodes.Status409Conflict,
 
-            _ => StatusCodes.Status500InternalServerError
+            _ => StatusCodes.Status500InternalServerError,
         };
 
-        return Problem(
-            statusCode: statusCode,
-            title: error.Code,
-            detail: error.Description);
+        return Problem(statusCode: statusCode, title: error.Code, detail: error.Description);
     }
 }

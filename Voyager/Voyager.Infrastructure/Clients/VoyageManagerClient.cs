@@ -130,9 +130,9 @@ public class VoyageManagerClient : IVoyageManagerClient
         CancellationToken ct
     )
     {
-        CommandStatusRequest requestContent = new()
+        UpdateAssignmentStateRequest requestContent = new()
         {
-            CommandStatus = (ConventionCommandStatus)agentCommand.Status,
+            AssignmentState = (ConventionAssignmentState)agentCommand.Status,
         };
         using HttpRequestMessage requestMessage = new(
             HttpMethod.Post,

@@ -1,5 +1,3 @@
 namespace VoyageManager.Api.DTOs;
 
-public class AgentAssignmentDto
-{
-}
+public class AgentAssignmentDto { }

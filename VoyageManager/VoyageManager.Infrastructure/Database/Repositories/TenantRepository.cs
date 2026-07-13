@@ -10,17 +10,17 @@ namespace VoyageManager.Infrastructure.Database.Repositories;
 
 public class TenantRepository : ITenantRepository
 {
-    private readonly VoyageManagerDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public TenantRepository(VoyageManagerDbContext dbContext)
+    public TenantRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Tenant?> GetTenantById(Guid tenantId, CancellationToken ct)
     {
-        Tenant? tenant = await _dbContext.Tenants
-            .Where(x => x.Id == tenantId)
+        Tenant? tenant = await _dbContext
+            .Tenants.Where(x => x.Id == tenantId)
             .FirstOrDefaultAsync(ct);
         return tenant;
     }

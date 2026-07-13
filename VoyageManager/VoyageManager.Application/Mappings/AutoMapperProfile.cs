@@ -10,8 +10,8 @@ public sealed class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Worker, VoyagerWorkerDTO>();
-        CreateMap<CommandType, ConventionCommandType>();
-        CreateMap<CommandAssignment, VoyagerCommandAssignmentDTO>();
+        CreateMap<Worker, WorkerDTO>();
+        CreateMap<WorkerCommandType, ConventionCommandType>();
+        CreateMap<CommandAssignment, CommandAssignmentDTO>();
     }
 }

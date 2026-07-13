@@ -29,8 +29,5 @@ public class AgentCommandService : IAgentCommandService
         await _voyageManagerClient.SendCommandStatus(token, command, ct);
     }
 
-    public async Task ExecuteCommandAsync(AgentCommand command)
-    {
-
-    }
+    public async Task ExecuteCommandAsync(AgentCommand command) { }
 }

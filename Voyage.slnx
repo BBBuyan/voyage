@@ -7,7 +7,10 @@
   </Folder>
   <Folder Name="/VoyageManager/">
     <File Path="VoyageManager/Directory.Packages.props" />
-    <Project Path="VoyageManager/VoyageManager.Api/VoyageManager.Api.csproj" Id="e6d01373-489a-4d58-acdf-b13673247a1b" />
+    <Project
+      Path="VoyageManager/VoyageManager.Api/VoyageManager.Api.csproj"
+      Id="e6d01373-489a-4d58-acdf-b13673247a1b"
+    />
     <Project Path="VoyageManager/VoyageManager.Application/VoyageManager.Application.csproj" />
     <Project Path="VoyageManager/VoyageManager.Domain/VoyageManager.Domain.csproj" />
     <Project Path="VoyageManager/VoyageManager.Infrastructure/VoyageManager.Infrastructure.csproj" />
@@ -20,7 +23,10 @@
     <Project Path="Voyager/Voyager.Application/Voyager.Application.csproj" />
     <Project Path="Voyager/Voyager.Domain/Voyager.Domain.csproj" />
     <Project Path="Voyager/Voyager.Infrastructure/Voyager.Infrastructure.csproj" />
-    <Project Path="Voyager/Voyager.Worker/Voyager.Worker.csproj" Id="f61b83f9-33bf-409e-97f2-1849bbe74551" />
+    <Project
+      Path="Voyager/Voyager.Worker/Voyager.Worker.csproj"
+      Id="f61b83f9-33bf-409e-97f2-1849bbe74551"
+    />
   </Folder>
   <Project Path="Test/Test.csproj" Id="c821e99b-e8e4-47c8-a92b-d3b464ac969f" />
 </Solution>

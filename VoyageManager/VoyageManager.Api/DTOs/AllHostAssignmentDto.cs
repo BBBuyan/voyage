@@ -1,5 +1,3 @@
 ﻿namespace VoyageManager.Api.DTOs;
 
-public class AllHostAssignmentDto
-{
-}
+public class AllHostAssignmentDto { }

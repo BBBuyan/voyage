@@ -26,37 +26,44 @@ public class GroupManagementController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<ActionResult<VoyagerWorkerDTO>> CreateGroup(CancellationToken ct)
+    public async Task<ActionResult<WorkerDTO>> CreateGroup(CancellationToken ct)
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
-    [HttpDelete]
-    public async Task<ActionResult<VoyagerWorkerDTO>> DeleteGroup(Guid id, CancellationToken ct)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<WorkerDTO>> DeleteGroup(Guid id, CancellationToken ct)
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
     [HttpGet("{id}/members")]
-    public async Task<ActionResult<VoyagerWorkerDTO>> GetGroupMembers(Guid id, CancellationToken ct)
+    public async Task<ActionResult<WorkerDTO>> GetGroupMembers(Guid id, CancellationToken ct)
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
-    [HttpDelete("{groupId:guid}/members/{memberId:guid}")]
-    public async Task<ActionResult<VoyagerWorkerDTO>> AddGroupMember(Guid groupId, Guid memberId, CancellationToken ct)
+    [HttpPut("{groupId}/members/{memberId}")]
+    public async Task<ActionResult<WorkerDTO>> AddGroupMember(
+        Guid groupId,
+        Guid memberId,
+        CancellationToken ct
+    )
     {
         return Ok(new());
     }
 
     [AllowAnonymous]
-    [HttpPut("{groupId:guid}/members/{memberId:guid}")]
-    public async Task<ActionResult<VoyagerWorkerDTO>> DeleteGroupMember(Guid groupId, Guid memberId, CancellationToken ct)
+    [HttpDelete("{groupId}/members/{memberId}")]
+    public async Task<ActionResult<WorkerDTO>> DeleteGroupMember(
+        Guid groupId,
+        Guid memberId,
+        CancellationToken ct
+    )
     {
         return Ok(new());
     }
-
 }
