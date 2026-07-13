@@ -10,7 +10,7 @@ public interface IWorkerService
 {
     Task<ErrorOr<Guid>> EnrollAsync(EnrollRequest request, CancellationToken ct);
 
-    Task<ErrorOr<TokenResult>> GetTokenAsync(TokenRequest request, CancellationToken ct);
+    Task<ErrorOr<TokenResponse>> GetTokenAsync(TokenRequest request, CancellationToken ct);
 
     Task<ErrorOr<CheckInResponse>> CheckInAsync(
         Guid workerId,

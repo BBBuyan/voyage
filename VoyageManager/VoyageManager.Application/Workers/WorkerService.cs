@@ -103,7 +103,7 @@ public class WorkerService : IWorkerService
         return agentId;
     }
 
-    public async Task<ErrorOr<TokenResult>> GetTokenAsync(
+    public async Task<ErrorOr<TokenResponse>> GetTokenAsync(
         TokenRequest request,
         CancellationToken ct
     )
@@ -126,7 +126,7 @@ public class WorkerService : IWorkerService
 
         int expirationInSeconds = (int)TimeSpan.FromHours(6).TotalSeconds;
         string token = _workerTokenProvider.GenerateJwtToken(request.AgentId, expirationInSeconds);
-        TokenResult result = new() { AccessToken = token, ExpiresIn = expirationInSeconds };
+        TokenResponse result = new() { AccessToken = token, ExpiresIn = expirationInSeconds };
         return result;
     }
 

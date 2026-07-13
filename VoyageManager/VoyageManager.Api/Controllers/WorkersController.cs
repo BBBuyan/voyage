@@ -63,7 +63,8 @@ public class WorkersController : BaseController
         string? workerIdString = User.FindFirst("sub")?.Value;
 
         if (!Guid.TryParse(workerIdString, out Guid workerId))
-            return BadRequest("Invalid sub in token.");
+            return Unauthorized("Invalid sub in token.");
+
 
         ErrorOr<CheckInResponse> result = await _workerService.CheckInAsync(workerId, request, ct);
 
@@ -78,18 +79,18 @@ public class WorkersController : BaseController
     [HttpPost("token")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TokenResult>> Token(
+    public async Task<ActionResult<TokenResponse>> Token(
         [FromBody] TokenRequest tokenRequest,
         CancellationToken ct
     )
     {
-        ErrorOr<TokenResult> result = await _workerService.GetTokenAsync(tokenRequest, ct);
+        ErrorOr<TokenResponse> result = await _workerService.GetTokenAsync(tokenRequest, ct);
 
         return result.MatchFirst<ActionResult>(val => Ok(val), err => ToProblem(err));
     }
 
     /// <summary>
-    /// Report the command results.
+    /// Update the assignment state.
     /// </summary>
     /// <returns></returns>
     [HttpPut("assignments/{id}/state")]
@@ -105,9 +106,7 @@ public class WorkersController : BaseController
         string? agentIdString = User.FindFirst("sub")?.Value;
 
         if (!Guid.TryParse(agentIdString, out Guid agentId))
-        {
-            return Unauthorized();
-        }
+            return Unauthorized("Invalid sub in token.");
 
         ErrorOr<Updated> result = await _workerService.UpdateCommandStatusAsync(
             agentId,

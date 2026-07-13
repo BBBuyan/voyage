@@ -81,7 +81,7 @@ public class VoyageManagerClient : IVoyageManagerClient
         );
         response.EnsureSuccessStatusCode();
 
-        TokenResult? result = await response.Content.ReadFromJsonAsync<TokenResult>(
+        TokenResponse? result = await response.Content.ReadFromJsonAsync<TokenResponse>(
             JsonOptions,
             ct
         );

@@ -1,6 +1,6 @@
 namespace VoyageManager.Conventions.Agents;
 
-public class TokenResult
+public class TokenResponse
 {
     public required string AccessToken { get; set; }
 
