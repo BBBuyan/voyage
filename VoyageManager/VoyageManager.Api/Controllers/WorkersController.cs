@@ -65,7 +65,6 @@ public class WorkersController : BaseController
         if (!Guid.TryParse(workerIdString, out Guid workerId))
             return Unauthorized("Invalid sub in token.");
 
-
         ErrorOr<CheckInResponse> result = await _workerService.CheckInAsync(workerId, request, ct);
 
         return result.MatchFirst<ActionResult>(value => Ok(value), err => ToProblem(err));
